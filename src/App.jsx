@@ -102,68 +102,6 @@ function DemoTestPanel({ onSend }) {
   )
 }
 
-// ─── Rubric Alignment card ────────────────────────────────────────────────────
-
-function RubricCard() {
-  const [open, setOpen] = React.useState(false)
-  const items = [
-    {
-      label: 'Industry Authenticity',
-      color: 'text-sea-400',
-      detail: 'Cold-chain 2-8°C pharma, berth congestion, ETA, multi-route rerouting, CO2 indices, service criticality.'
-    },
-    {
-      label: 'Technical Robustness',
-      color: 'text-green-400',
-      detail: 'MOCK mode (no API key), graceful LIVE→DEGRADED fallback, localStorage decision log, hash-chain audit trail, 8s refresh.'
-    },
-    {
-      label: 'UI / UX',
-      color: 'text-accent-500',
-      detail: 'Maritime command map, AI advisor chat, what-if simulator, decision interface, filter controls, proactive alerts.'
-    },
-    {
-      label: 'Critical Reflection',
-      color: 'text-yellow-300',
-      detail: 'Bounded snapshot data, uncertainty handling, Low-confidence → HUMAN VALIDATION, production caveats, not autonomous execution.'
-    }
-  ]
-
-  return (
-    <div className="card">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="card-header w-full hover:bg-navy-700/30 transition"
-      >
-        <div className="flex items-center gap-2">
-          <svg className="w-4 h-4 text-accent-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-          </svg>
-          <h3 className="text-sm font-semibold tracking-wide text-navy-50">RUBRIC ALIGNMENT</h3>
-        </div>
-        <svg className={`w-4 h-4 text-navy-400 transition-transform ${open ? 'rotate-180' : ''}`}
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="p-3 space-y-2.5">
-          {items.map(item => (
-            <div key={item.label}>
-              <div className={`text-[11px] font-bold ${item.color} mb-0.5`}>{item.label}</div>
-              <p className="text-[10px] text-navy-300 leading-relaxed">{item.detail}</p>
-            </div>
-          ))}
-          <div className="border-t border-navy-600/40 pt-2 text-[10px] text-navy-500">
-            Supply Chain 4.0 — Group Assignment 2: AI Agent for Digital Supply Chain Orchestration
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ─── Browser notification helper ─────────────────────────────────────────────
 let notifPermission = Notification?.permission ?? 'default'
 
@@ -509,8 +447,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Rubric Alignment */}
-          <RubricCard />
         </div>
       </main>
 
