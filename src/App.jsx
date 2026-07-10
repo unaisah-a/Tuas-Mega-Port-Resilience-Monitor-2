@@ -297,24 +297,8 @@ export default function App() {
         mode={mode}
       />
 
-      {/* Scenario bar */}
+      {/* Toolbar bar */}
       <div className="bg-navy-800/60 border-b border-navy-600/40 px-4 py-2 flex items-center gap-2 overflow-x-auto">
-        <span className="text-[11px] text-navy-300 font-semibold tracking-wider shrink-0">SCENARIOS:</span>
-        {SCENARIOS.map(s => (
-          <button
-            key={s.id}
-            onClick={() => runScenario(s.id)}
-            className={`text-[11px] px-2.5 py-1 rounded-md border transition shrink-0 ${
-              activeScenario === s.id
-                ? 'bg-accent-500/20 border-accent-500/50 text-accent-500'
-                : 'bg-navy-700/40 border-navy-600/40 text-navy-200 hover:bg-navy-600/50'
-            }`}
-            title={s.summary}
-          >
-            {s.id} · {s.title}
-          </button>
-        ))}
-
         {/* What-if toggle */}
         <button
           onClick={() => setShowSimulator(s => !s)}
