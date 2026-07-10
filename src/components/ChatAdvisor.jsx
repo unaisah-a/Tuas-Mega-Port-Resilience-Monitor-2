@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react'
 import { query as mockQuery, QUICK_QUESTIONS } from '../agent/mockBrain.js'
 import { queryLive, queryDegraded, DEFAULT_MODEL } from '../agent/liveBrain.js'
 
@@ -12,7 +12,6 @@ const CONF_CHIP = {
 const CONF_DOT = {
   High: 'bg-green-400', Medium: 'bg-accent-500', Low: 'bg-red-400'
 }
-
 const SECTION_META = {
   logistics:    { label: 'LOGISTICS',    color: 'text-sea-400' },
   inventory:    { label: 'INVENTORY',    color: 'text-green-400' },
@@ -23,12 +22,13 @@ const SECTION_META = {
 // ─── Structured message renderer ──────────────────────────────────────────────
 
 function StructuredMessage({ sections, confidence, humanValidationRequired, source }) {
-  const [expanded, setExpanded] = useState({ logistics: true, inventory: true, procurement: false, orchestrator: true })
+  const [expanded, setExpanded] = useState({
+    logistics: true, inventory: true, procurement: false, orchestrator: true
+  })
   const toggle = key => setExpanded(e => ({ ...e, [key]: !e[key] }))
 
   return (
     <div className="space-y-1.5">
-      {/* Confidence + validation + source badges */}
       <div className="flex items-center gap-1.5 flex-wrap mb-2">
         {confidence && (
           <span className={`chip border text-[10px] ${CONF_CHIP[confidence] || CONF_CHIP.Medium}`}>
@@ -46,18 +46,15 @@ function StructuredMessage({ sections, confidence, humanValidationRequired, sour
         )}
         {source === 'LIVE' && (
           <span className="chip border bg-green-500/10 text-green-400 border-green-500/30 text-[10px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 blink" />
-            LIVE
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 blink" />LIVE
           </span>
         )}
         {source === 'DEGRADED' && (
           <span className="chip border bg-amber-500/10 text-amber-400 border-amber-500/30 text-[10px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-            EXPERT RULES
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />EXPERT RULES
           </span>
         )}
       </div>
-
       {Object.entries(sections).map(([key, lines]) => {
         const meta = SECTION_META[key]
         if (!meta || !lines?.length) return null
@@ -90,8 +87,17 @@ function StructuredMessage({ sections, confidence, humanValidationRequired, sour
   )
 }
 
-function PlainMessage({ text }) {
-  return <p className="text-xs text-navy-100 leading-relaxed whitespace-pre-line">{text}</p>
+function PlainMessage({ text, isAlert }) {
+  return (
+    <p className={`text-xs leading-relaxed whitespace-pre-line ${isAlert ? 'text-amber-300 font-medium' : 'text-navy-100'}`}>
+      {isAlert && (
+        <svg className="w-3 h-3 inline mr-1 -mt-0.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><path d="M12 9v4m0 4h.01" />
+        </svg>
+      )}
+      {text}
+    </p>
+  )
 }
 
 // ─── Degraded banner ──────────────────────────────────────────────────────────
@@ -131,17 +137,12 @@ function LiveSettings({ apiKey, setApiKey, llmModel, setLlmModel, onClose }) {
           </svg>
         </button>
       </div>
-
       <div className="space-y-1.5">
         <label className="text-[10px] text-navy-300 uppercase tracking-wider">API Provider</label>
         <div className="flex items-center gap-2 bg-navy-800 border border-navy-600/50 rounded-lg px-3 py-1.5">
-          <svg className="w-3 h-3 text-navy-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" /><path d="M12 8v4m0 4h.01" />
-          </svg>
           <span className="text-[11px] text-navy-200">Claude (Anthropic)</span>
         </div>
       </div>
-
       <div className="space-y-1.5">
         <label className="text-[10px] text-navy-300 uppercase tracking-wider">API Key</label>
         <input
@@ -152,7 +153,6 @@ function LiveSettings({ apiKey, setApiKey, llmModel, setLlmModel, onClose }) {
           className="w-full bg-navy-800 border border-navy-600/50 rounded-lg px-3 py-1.5 text-[11px] text-navy-50 placeholder-navy-500 focus:outline-none focus:ring-1 focus:ring-accent-500 font-mono"
         />
       </div>
-
       <div className="space-y-1.5">
         <label className="text-[10px] text-navy-300 uppercase tracking-wider">Model</label>
         <input
@@ -162,7 +162,6 @@ function LiveSettings({ apiKey, setApiKey, llmModel, setLlmModel, onClose }) {
           className="w-full bg-navy-800 border border-navy-600/50 rounded-lg px-3 py-1.5 text-[11px] text-navy-50 font-mono focus:outline-none focus:ring-1 focus:ring-accent-500"
         />
       </div>
-
       <div className="flex items-start gap-1.5 bg-amber-500/8 border border-amber-500/20 rounded-lg px-2.5 py-2">
         <svg className="w-3 h-3 text-amber-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><path d="M12 9v4m0 4h.01" />
@@ -175,33 +174,27 @@ function LiveSettings({ apiKey, setApiKey, llmModel, setLlmModel, onClose }) {
   )
 }
 
-// ─── Mode selector buttons ────────────────────────────────────────────────────
+const MODE_BTN_ACTIVE  = { MOCK: 'bg-sea-400/15 text-sea-400 border-sea-400/30', LIVE: 'bg-green-500/15 text-green-400 border-green-500/30', DEGRADED: 'bg-amber-500/15 text-amber-400 border-amber-500/30' }
+const MODE_BTN_IDLE    = 'bg-navy-700/40 text-navy-400 border-navy-600/40 hover:bg-navy-600/50'
 
-const MODE_BTN = {
-  MOCK:     'bg-sea-400/15 text-sea-400 border-sea-400/30 hover:bg-sea-400/25',
-  LIVE:     'bg-green-500/15 text-green-400 border-green-500/30 hover:bg-green-500/25',
-  DEGRADED: 'bg-amber-500/15 text-amber-400 border-amber-500/30'
-}
-const MODE_BTN_INACTIVE = 'bg-navy-700/40 text-navy-400 border-navy-600/40 hover:bg-navy-600/50'
+// ─── Main component (forwardRef for pushAlert / prefill) ──────────────────────
 
-// ─── Main component ───────────────────────────────────────────────────────────
-
-export default function ChatAdvisor({
+const ChatAdvisor = forwardRef(function ChatAdvisor({
   onRecommendation,
   mode, setMode,
   apiKey, setApiKey,
   llmModel, setLlmModel
-}) {
+}, ref) {
   const [messages, setMessages] = useState([
     {
       role: 'advisor',
-      plain: `TMPRM Digital Orchestrator online — ${mode} MODE.\n\nI reason over simulated snapshot data only: vessels, weather, berth occupancy, 12 active shipments (2 cold-chain pharma at 2-8°C), and 4 route options.\n\nEvery answer follows the LOGISTICS → INVENTORY → PROCUREMENT → ORCHESTRATOR structure. Use the quick-question buttons below to run the 5 required test scenarios, or type your own query.`
+      plain: `TMPRM Digital Orchestrator online — ${mode} MODE.\n\nI reason over simulated snapshot data: 12 active shipments (2 cold-chain pharma at 2-8°C), Malacca weather, Tuas berth occupancy, and 4 route options.\n\nUse the quick-question buttons or type a query. Every answer updates the Decision Interface.`
     }
   ])
   const [input, setInput] = useState('')
   const [thinking, setThinking] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const [degradedBanner, setDegradedBanner] = useState(null) // null | { reason: string }
+  const [degradedBanner, setDegradedBanner] = useState(null)
   const scrollRef = useRef(null)
   const messagesRef = useRef(messages)
   messagesRef.current = messages
@@ -210,15 +203,30 @@ export default function ChatAdvisor({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
-  // Switching back to MOCK clears the degraded banner
+  // ─── Exposed imperative API ───────────────────────────────────────────────
+  useImperativeHandle(ref, () => ({
+    // Push a proactive system alert into the chat stream (no Decision Interface update)
+    pushAlert(text) {
+      setMessages(prev => [...prev, {
+        role: 'advisor',
+        plain: text,
+        isAlert: true
+      }])
+    },
+    // Pre-fill the input field so the user can review and send
+    prefill(text) {
+      setInput(text)
+      // Give focus to textarea if possible
+      document.querySelector('[data-chat-input]')?.focus()
+    }
+  }), [])
+
   const handleSetMode = (newMode) => {
     setMode(newMode)
     if (newMode === 'MOCK') setDegradedBanner(null)
-    if (newMode === 'LIVE') setDegradedBanner(null)
-    if (newMode === 'LIVE') setShowSettings(true)
+    if (newMode === 'LIVE') { setDegradedBanner(null); setShowSettings(true) }
   }
 
-  // Convert a brain result into the Decision Interface format and call onRecommendation
   const pushToDecisionInterface = (result) => {
     if (!result?.decision || !onRecommendation) return
     const d = result.decision
@@ -233,10 +241,8 @@ export default function ChatAdvisor({
         delay: d.tradeoffs.delay,
         cost: d.tradeoffs.cost,
         co2: d.tradeoffs.co2,
-        coldChain: d.tradeoffs.coldChainSafe === true
-          ? 'Protected'
-          : d.tradeoffs.coldChainSafe === false
-          ? 'At Risk'
+        coldChain: d.tradeoffs.coldChainSafe === true ? 'Protected'
+          : d.tradeoffs.coldChainSafe === false ? 'At Risk'
           : d.tradeoffs.coldChainSafe ?? 'N/A',
         opsRisk: d.tradeoffs.risk ?? 'Medium',
         note: d.dataUsed?.slice(0, 2).join(' | ')
@@ -255,52 +261,33 @@ export default function ChatAdvisor({
   const send = async (text) => {
     const msg = (text || input).trim()
     if (!msg || thinking) return
-
     setInput('')
     setThinking(true)
-
-    const userMsg = { role: 'user', plain: msg }
-    setMessages(prev => [...prev, userMsg])
+    setMessages(prev => [...prev, { role: 'user', plain: msg }])
 
     try {
       let result
-
       if (mode === 'LIVE') {
-        // ── LIVE path ───────────────────────────────────────────────────────
         try {
-          result = await queryLive({
-            message: msg,
-            apiKey,
-            model: llmModel || DEFAULT_MODEL,
-            history: messagesRef.current
-          })
-          // Successful LIVE call clears degraded banner
+          result = await queryLive({ message: msg, apiKey, model: llmModel || DEFAULT_MODEL, history: messagesRef.current })
           setDegradedBanner(null)
-          if (mode !== 'LIVE') setMode('LIVE') // restore if was DEGRADED
         } catch (err) {
-          // ── Fallback to DEGRADED ─────────────────────────────────────────
-          const reason = err?.message || 'Unknown error'
           result = queryDegraded(msg)
           setMode('DEGRADED')
-          setDegradedBanner({ reason })
+          setDegradedBanner({ reason: err?.message || 'Unknown error' })
         }
       } else {
-        // ── MOCK path (also used after DEGRADED fallback) ────────────────
-        await new Promise(r => setTimeout(r, 280)) // brief UX pause
+        await new Promise(r => setTimeout(r, 280))
         result = mode === 'DEGRADED' ? queryDegraded(msg) : { ...mockQuery(msg), source: 'MOCK' }
       }
 
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'advisor',
-          structured: result.sections,
-          confidence: result.confidence,
-          humanValidationRequired: result.humanValidationRequired,
-          source: result.source
-        }
-      ])
-
+      setMessages(prev => [...prev, {
+        role: 'advisor',
+        structured: result.sections,
+        confidence: result.confidence,
+        humanValidationRequired: result.humanValidationRequired,
+        source: result.source
+      }])
       pushToDecisionInterface(result)
     } finally {
       setThinking(false)
@@ -309,7 +296,7 @@ export default function ChatAdvisor({
 
   return (
     <div className="card flex flex-col" style={{ height: '100%', minHeight: 0 }}>
-      {/* ── Header ───────────────────────────────────────────────────────── */}
+      {/* Header */}
       <div className="card-header shrink-0">
         <div className="flex items-center gap-2">
           <svg className="w-4 h-4 text-accent-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -317,25 +304,20 @@ export default function ChatAdvisor({
           </svg>
           <h3 className="text-sm font-semibold tracking-wide text-navy-50">AI LOGISTICS ADVISOR</h3>
         </div>
-        {/* Mode selector */}
         <div className="flex items-center gap-1">
           {['MOCK', 'LIVE'].map(m => (
-            <button
-              key={m}
-              onClick={() => handleSetMode(m)}
+            <button key={m} onClick={() => handleSetMode(m)}
               className={`text-[10px] px-2 py-0.5 rounded border transition font-semibold ${
                 mode === m || (mode === 'DEGRADED' && m === 'LIVE')
-                  ? MODE_BTN[mode === 'DEGRADED' ? 'DEGRADED' : m]
-                  : MODE_BTN_INACTIVE
+                  ? MODE_BTN_ACTIVE[mode === 'DEGRADED' ? 'DEGRADED' : m]
+                  : MODE_BTN_IDLE
               }`}
             >
               {mode === 'DEGRADED' && m === 'LIVE' ? 'DEGRADED' : m}
             </button>
           ))}
-          {/* Settings gear — only relevant in LIVE */}
           <button
             onClick={() => setShowSettings(s => !s)}
-            title="LIVE mode settings"
             className={`p-1 rounded border transition ${showSettings ? 'bg-accent-500/20 border-accent-500/30 text-accent-500' : 'bg-navy-700/40 border-navy-600/40 text-navy-400 hover:text-navy-200'}`}
           >
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -346,49 +328,36 @@ export default function ChatAdvisor({
         </div>
       </div>
 
-      {/* ── LIVE settings panel ────────────────────────────────────────────── */}
       {showSettings && (
-        <LiveSettings
-          apiKey={apiKey}
-          setApiKey={setApiKey}
-          llmModel={llmModel}
-          setLlmModel={setLlmModel}
-          onClose={() => setShowSettings(false)}
-        />
+        <LiveSettings apiKey={apiKey} setApiKey={setApiKey} llmModel={llmModel} setLlmModel={setLlmModel} onClose={() => setShowSettings(false)} />
       )}
 
-      {/* ── Degraded banner ────────────────────────────────────────────────── */}
       {degradedBanner && (
-        <DegradedBanner
-          reason={degradedBanner.reason}
-          onDismiss={() => setDegradedBanner(null)}
-        />
+        <DegradedBanner reason={degradedBanner.reason} onDismiss={() => setDegradedBanner(null)} />
       )}
 
-      {/* ── Message stream ─────────────────────────────────────────────────── */}
+      {/* Message stream */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3" style={{ minHeight: 0 }}>
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {m.role === 'advisor' && (
-              <div className="w-5 h-5 rounded-full bg-accent-500/20 border border-accent-500/30 flex items-center justify-center shrink-0 mt-0.5 mr-2">
-                <svg className="w-2.5 h-2.5 text-accent-500" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="12" r="4" />
-                </svg>
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 mr-2 ${m.isAlert ? 'bg-amber-500/20 border border-amber-500/30' : 'bg-accent-500/20 border border-accent-500/30'}`}>
+                {m.isAlert
+                  ? <svg className="w-2.5 h-2.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                  : <svg className="w-2.5 h-2.5 text-accent-500" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4" /></svg>
+                }
               </div>
             )}
             <div className={`rounded-lg px-3 py-2.5 border ${
               m.role === 'user'
                 ? 'bg-accent-500/15 text-navy-50 border-accent-500/30 max-w-[85%]'
+                : m.isAlert
+                ? 'bg-amber-500/8 border-amber-500/30 flex-1'
                 : 'bg-navy-800/70 border-navy-600/40 flex-1'
             }`}>
               {m.structured
-                ? <StructuredMessage
-                    sections={m.structured}
-                    confidence={m.confidence}
-                    humanValidationRequired={m.humanValidationRequired}
-                    source={m.source}
-                  />
-                : <PlainMessage text={m.plain} />
+                ? <StructuredMessage sections={m.structured} confidence={m.confidence} humanValidationRequired={m.humanValidationRequired} source={m.source} />
+                : <PlainMessage text={m.plain} isAlert={m.isAlert} />
               }
             </div>
           </div>
@@ -409,24 +378,19 @@ export default function ChatAdvisor({
         )}
       </div>
 
-      {/* ── Quick questions + input ────────────────────────────────────────── */}
+      {/* Quick questions + input */}
       <div className="border-t border-navy-600/60 p-2.5 space-y-2 shrink-0">
         <div className="flex gap-1 flex-wrap">
           {QUICK_QUESTIONS.map(q => (
-            <button
-              key={q.id}
-              onClick={() => send(q.prompt)}
-              disabled={thinking}
-              title={q.prompt}
-              className="text-[10px] px-2 py-1 rounded-md bg-navy-700/60 hover:bg-navy-600 text-navy-100 border border-navy-600/40 transition disabled:opacity-50"
-            >
+            <button key={q.id} onClick={() => send(q.prompt)} disabled={thinking} title={q.prompt}
+              className="text-[10px] px-2 py-1 rounded-md bg-navy-700/60 hover:bg-navy-600 text-navy-100 border border-navy-600/40 transition disabled:opacity-50">
               {q.id}: {q.label}
             </button>
           ))}
         </div>
-
         <div className="flex gap-2">
           <input
+            data-chat-input
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
@@ -434,21 +398,18 @@ export default function ChatAdvisor({
             placeholder="Ask about a vessel, route, weather, scenario…"
             className="flex-1 bg-navy-900 border border-navy-600 rounded-lg px-3 py-2 text-xs text-navy-50 placeholder-navy-400 focus:outline-none focus:ring-1 focus:ring-accent-500 disabled:opacity-50"
           />
-          <button
-            onClick={() => send()}
-            disabled={thinking || !input.trim()}
-            className="btn-primary text-xs px-3 disabled:opacity-50"
-          >
+          <button onClick={() => send()} disabled={thinking || !input.trim()} className="btn-primary text-xs px-3 disabled:opacity-50">
             Send
           </button>
         </div>
-
         <p className="text-[9px] text-navy-500 text-center">
-          {mode === 'MOCK' && 'Digital Orchestrator · MOCK MODE · All reasoning uses simulated snapshot data only'}
-          {mode === 'LIVE' && 'LIVE MODE · Sending snapshot + query to Claude API · 30s timeout'}
+          {mode === 'MOCK' && 'MOCK MODE · Deterministic expert rules · Snapshot data only · No API key required'}
+          {mode === 'LIVE' && 'LIVE MODE · Claude API · 30s timeout · Falls back to MOCK on failure'}
           {mode === 'DEGRADED' && 'DEGRADED MODE · LIVE failed · Expert rules active · Decision Interface still updating'}
         </p>
       </div>
     </div>
   )
-}
+})
+
+export default ChatAdvisor
