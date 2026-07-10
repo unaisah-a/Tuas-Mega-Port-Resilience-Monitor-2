@@ -518,6 +518,76 @@ function generalResponse(msg, snap) {
     })
   }
 
+  // Route comparison: Sunda vs Lombok specific question
+  if (
+    (msg.includes('sunda') || msg.includes('lombok')) &&
+    (msg.includes('reroute') || msg.includes('route') || msg.includes('should i') || msg.includes('which') || msg.includes('via') || msg.includes('or'))
+  ) {
+    const w = snap.weather
+    const ps = snap.portSummary
+    const sunda = snap.routes.find(r => r.id === 'R_SUNDA')
+    const lombok = snap.routes.find(r => r.id === 'R_LOMBOK')
+    const coldChain = snap.shipments.filter(s => s.isColdChain && s.temperatureRange === '2-8 C')
+    const stormActive = w.riskLevel === 'Severe' || w.stormProbability > 70
+    const congestionActive = ps.berthOccupancy >= 90
+
+    const sundaRec = stormActive
+      ? 'Sunda Strait is the PREFERRED reroute — calmer seas, +2 days transit, cold-chain safe with intact reefer monitoring.'
+      : 'Sunda Strait is a viable contingency — +2 days, cost ×1.18, CO2 ×1.15. Only consider if Malacca disruption is confirmed.'
+
+    const lombokRec = `Lombok Strait is the deep alternate — +3.5 days, cost ×1.26, CO2 ×1.24 (highest of all sea routes). ${coldChain.length > 0 ? 'HUMAN VALIDATION REQUIRED for cold-chain pharma cargo (SHP-2041, SHP-2042) as +3.5 days may breach the 2-8°C service window.' : 'No cold-chain risk for non-pharma cargo.'}`
+
+    const decision = makeDecision({
+      recommendation: stormActive
+        ? `Reroute via Sunda Strait. Lombok is not necessary while Sunda is available. ${coldChain.length > 0 ? 'Cold-chain pharma (SHP-2041, SHP-2042) must use Sunda — Lombok +3.5 day extension is too long.' : ''}`
+        : 'Sunda Strait is preferred over Lombok if rerouting is required. Malacca baseline should be maintained unless disruption is confirmed.',
+      selectedAction: stormActive ? 'Select Sunda Strait reroute for inbound cold-chain vessels' : 'Monitor Malacca — Sunda on standby if disruption confirmed',
+      confidence: stormActive ? 'High' : 'Medium',
+      humanValidationRequired: !stormActive || coldChain.some(s => s.etaHours > 48),
+      tradeoffs: {
+        delay: sunda?.deltaDays ?? 2,
+        cost: sunda ? (sunda.costIndex - 100) * 1000 : 0,
+        co2: sunda?.co2Index ?? 115,
+        coldChainSafe: true,
+        risk: stormActive ? 'Medium' : 'Low'
+      },
+      dataUsed: [
+        `Malacca: storm probability ${w.stormProbability}%, ${w.riskLevel} risk`,
+        `Sunda: +${sunda?.deltaDays ?? 2} days, cost ×${((sunda?.costIndex ?? 118)/100).toFixed(2)}, CO2 ×${((sunda?.co2Index ?? 115)/100).toFixed(2)}, cold-chain safe`,
+        `Lombok: +${lombok?.deltaDays ?? 3.5} days, cost ×${((lombok?.costIndex ?? 126)/100).toFixed(2)}, CO2 ×${((lombok?.co2Index ?? 124)/100).toFixed(2)}, human validation required for cold-chain`,
+        ...coldChain.map(s => `${s.id} (${s.vessel}): ${s.temperatureRange}, ETA ${s.etaHours}h`)
+      ]
+    })
+
+    return makeResponse({
+      logistics: [
+        `Route comparison: Sunda vs Lombok Strait reroute options.`,
+        `Current Malacca status: ${w.conditionLabel}, storm probability ${w.stormProbability}% (${w.riskLevel} risk). ${stormActive ? 'Reroute is WARRANTED.' : 'Reroute not yet mandatory — conditions elevated but manageable.'}`,
+        sundaRec,
+        lombokRec,
+        `Map view: Select route buttons below the interactive Folium map to load trade-off data into the Decision Interface.`
+      ],
+      inventory: [
+        `Cold-chain status: ${coldChain.length} critical 2-8°C pharma shipments active (${coldChain.map(s => `${s.id} — ${s.inventoryRisk}`).join('; ')}).`,
+        `Sunda Strait (${sunda?.deltaDays ?? 2} extra days): cold-chain safe if reefer monitoring is maintained throughout. Recommended for SHP-2041 and SHP-2042.`,
+        `Lombok Strait (${lombok?.deltaDays ?? 3.5} extra days): may threaten cold-chain 2-8°C service window. HUMAN VALIDATION REQUIRED before committing cold-chain cargo to Lombok.`
+      ],
+      procurement: [
+        `Sunda reroute: cost index 118 (+18%) — demurrage and carrier pre-authorisation required. Notify ${coldChain.map(s => s.customer).join(', ')}.`,
+        `Lombok reroute: cost index 126 (+26%) — highest sea-route cost. Reserve for emergency scenario only.`,
+        `Air freight remains option of last resort: cost index 340, CO2 index 610 — only for critical cold-chain if sea transit time is unacceptable.`
+      ],
+      orchestrator: [
+        `Decision: ${stormActive ? 'Reroute cold-chain vessels via Sunda immediately.' : 'Hold Malacca baseline. Prepare Sunda as contingency. Do not commit to Lombok without confirmed dual-route failure.'}`,
+        `Action sequence: (1) Validate Malacca disruption severity. (2) If confirmed, issue Sunda Strait pre-authorisation. (3) Brief carriers. (4) Monitor reefer telemetry for SHP-2041/SHP-2042 throughout alternate transit.`,
+        `Lombok remains a standby — only activate if Malacca AND Sunda are simultaneously unavailable.`
+      ],
+      confidence: stormActive ? 'High' : 'Medium',
+      humanValidationRequired: coldChain.some(s => s.etaHours > 48),
+      decision
+    })
+  }
+
   // Route query
   if (/route|malacca|sunda|lombok|air freight/.test(msg)) {
     const routes = snap.routes

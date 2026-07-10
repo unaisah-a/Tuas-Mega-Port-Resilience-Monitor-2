@@ -156,6 +156,7 @@ export default function App() {
   const [snapshot, setSnapshot] = useState(() => getSnapshot())
   const [stormActive, setStormActive] = useState(false)
   const [congestionActive, setCongestionActive] = useState(false)
+  const [activeRouteId, setActiveRouteId] = useState(null)
 
   // ─── Mode state ──────────────────────────────────────────────────────────────
   const [mode, setMode] = useState('MOCK')
@@ -284,6 +285,22 @@ export default function App() {
     prefillChat(`Assess risk for ${shipmentId}`)
   }, [prefillChat])
 
+  // ─── Route selection → Decision Interface ────────────────────────────────
+  const handleRouteSelect = useCallback((routeDef, isStorm) => {
+    setActiveRouteId(routeDef.id)
+    const stormActive_ = isStorm || stormActive
+    const note = stormActive_ ? routeDef.stormNote : routeDef.note
+    const confidence = stormActive_ ? routeDef.stormConfidence : routeDef.confidence
+    const humanVal = routeDef.humanValidation || (stormActive_ && routeDef.id === 'R_MALACCA')
+
+    setRecommendation(buildAlertDecision(
+      `Select ${routeDef.label} for inbound vessels`,
+      `${routeDef.label}: Δ${routeDef.deltaDays > 0 ? '+' : ''}${routeDef.deltaDays} days, cost ×${(routeDef.costIndex/100).toFixed(2)}, CO2 ×${(routeDef.co2Index/100).toFixed(2)}. Risk: ${routeDef.riskLevel}. Cold-chain safe: ${routeDef.coldChainSafe ? 'Yes' : 'Conditional'}. ${note}`,
+      confidence,
+      humanVal
+    ))
+  }, [stormActive])
+
   // ─── SL TRADER "View Full Details" ───────────────────────────────────────
   const handleViewSlTrader = useCallback(() => {
     prefillChat('Show me vessel SL TRADER')
@@ -361,8 +378,11 @@ export default function App() {
             onSelect={handleSelectVessel}
             snapshot={snapshot}
             stormActive={stormActive}
+            congestionActive={congestionActive}
             vesselFilter={vesselFilter}
             onViewSlTrader={handleViewSlTrader}
+            onRouteSelect={handleRouteSelect}
+            activeRouteId={activeRouteId}
           />
           <DecisionInterface recommendation={recommendation} onLog={handleLog} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
