@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const CONF_STYLES = {
   High: { bg: 'bg-green-500/15', text: 'text-green-400', ring: 'ring-green-500/40', dot: 'bg-green-400' },
@@ -27,6 +27,19 @@ export default function DecisionInterface({ recommendation, onLog, compact = fal
   const [challenging, setChallenging] = useState(false)
   const [challengeText, setChallengeText] = useState('')
   const [logged, setLogged] = useState(false)
+  const prevRecKey = useRef(null)
+
+  // Reset local state when recommendation changes
+  useEffect(() => {
+    const key = recommendation ? `${recommendation.vesselId}-${recommendation.action}-${recommendation.timestamp}` : null
+    if (key !== prevRecKey.current) {
+      prevRecKey.current = key
+      setSelectedAction(null)
+      setChallenging(false)
+      setChallengeText('')
+      setLogged(false)
+    }
+  }, [recommendation])
 
   if (!recommendation) {
     return (
