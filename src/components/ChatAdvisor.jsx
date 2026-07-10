@@ -295,7 +295,7 @@ const ChatAdvisor = forwardRef(function ChatAdvisor({
   }
 
   return (
-    <div className="card flex flex-col" style={{ height: '75vh', minHeight: '420px', maxHeight: '800px' }}>
+    <div className="card flex flex-col" style={{ flex: 1, minHeight: 0 }}>
       {/* Header */}
       <div className="card-header shrink-0">
         <div className="flex items-center gap-2">
