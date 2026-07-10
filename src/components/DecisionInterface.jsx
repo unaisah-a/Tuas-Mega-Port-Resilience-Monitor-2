@@ -43,8 +43,44 @@ export default function DecisionInterface({ recommendation, onLog, compact = fal
 
   if (!recommendation) {
     return (
-      <div className="card p-4 text-sm text-navy-200">
-        No active recommendation. Select a vessel or run a scenario to generate a recommendation.
+      <div className="card">
+        <div className="card-header">
+          <div className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-accent-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg>
+            <h3 className="text-sm font-semibold tracking-wide text-navy-50">DECISION INTERFACE</h3>
+          </div>
+          <span className="chip bg-navy-700/60 text-navy-400 border border-navy-600/50">
+            <span className="w-1.5 h-1.5 rounded-full bg-navy-500" /> Awaiting input
+          </span>
+        </div>
+        <div className="p-4 space-y-3">
+          <div className="space-y-2">
+            <div className="bg-navy-900/40 rounded-lg px-3 py-2 border border-navy-600/30">
+              <div className="text-[11px] uppercase tracking-wider text-navy-400 mb-0.5">Current Recommendation</div>
+              <div className="text-sm text-navy-400 font-mono">No decision selected</div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-navy-900/40 rounded-lg px-3 py-2 border border-navy-600/30">
+                <div className="text-[11px] uppercase tracking-wider text-navy-400 mb-0.5">Confidence</div>
+                <div className="text-sm text-navy-400 font-mono">Not assessed</div>
+              </div>
+              <div className="bg-navy-900/40 rounded-lg px-3 py-2 border border-navy-600/30">
+                <div className="text-[11px] uppercase tracking-wider text-navy-400 mb-0.5">Human Validation</div>
+                <div className="text-sm text-navy-400 font-mono">Not required</div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <button disabled className="btn-primary opacity-40 cursor-not-allowed">Accept recommendation</button>
+            <button disabled className="btn-outline opacity-40 cursor-not-allowed">Challenge recommendation</button>
+            <button disabled className="btn-ghost opacity-40 cursor-not-allowed">Log decision</button>
+          </div>
+          <p className="text-[11px] text-navy-400 text-center">
+            Select a vessel on the map or run a scenario to generate a recommendation.
+          </p>
+        </div>
       </div>
     )
   }
