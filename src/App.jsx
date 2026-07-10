@@ -3,6 +3,7 @@ import Header from './components/Header.jsx'
 import ChatAdvisor from './components/ChatAdvisor.jsx'
 import CommandMap from './components/CommandMap.jsx'
 import DecisionInterface from './components/DecisionInterface.jsx'
+import WhatIfSimulator from './components/WhatIfSimulator.jsx'
 import { WeatherCard, PortSummaryCard, LegendCard, BerthOccupancyWidget, ShipmentRiskBoard, RouteRiskSummary, NewsTicker } from './components/Cards.jsx'
 import { buildRecommendation, buildScenarioRecommendation, SCENARIOS } from './engine/decisionEngine.js'
 import {
@@ -79,6 +80,9 @@ export default function App() {
   // ─── Filters ─────────────────────────────────────────────────────────────────
   const [weatherFilter, setWeatherFilter] = useState('all')      // 'all' | 'high-risk'
   const [vesselFilter, setVesselFilter] = useState('all')         // 'all' | 'cold-chain' | 'general'
+
+  // ─── What-if simulator visibility ────────────────────────────────────────────
+  const [showSimulator, setShowSimulator] = useState(true)
 
   // ─── Chat prefill & push-alert ref ───────────────────────────────────────────
   const chatRef = useRef(null)
@@ -226,8 +230,23 @@ export default function App() {
           </button>
         ))}
 
+        {/* What-if toggle */}
+        <button
+          onClick={() => setShowSimulator(s => !s)}
+          className={`ml-auto shrink-0 text-[11px] px-2.5 py-1 rounded-md border transition font-medium flex items-center gap-1.5 ${
+            showSimulator
+              ? 'bg-accent-500/20 border-accent-500/50 text-accent-500'
+              : 'bg-navy-700/40 border-navy-600/40 text-navy-200 hover:bg-navy-600/50'
+          }`}
+        >
+          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          What-if Simulator
+        </button>
+
         {/* Filters */}
-        <span className="ml-auto shrink-0 text-[11px] text-navy-500 font-semibold tracking-wider">FILTER:</span>
+        <span className="shrink-0 text-[11px] text-navy-500 font-semibold tracking-wider">FILTER:</span>
         <select
           value={weatherFilter}
           onChange={e => setWeatherFilter(e.target.value)}
@@ -341,6 +360,13 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* What-if Simulator — full width, collapsible */}
+      {showSimulator && (
+        <div className="px-3 pb-3">
+          <WhatIfSimulator onRecommendation={handleRecommendation} />
+        </div>
+      )}
 
       <div className="px-3 pb-3">
         <NewsTicker snapshot={snapshot} />
