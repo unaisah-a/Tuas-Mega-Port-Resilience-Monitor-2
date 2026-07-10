@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { MODE } from '../data/simulation.js'
 
-export default function Header({ decisionCount, lastUpdated }) {
+const MODE_CHIP = {
+  MOCK: 'bg-sea-400/15 text-sea-400 border-sea-400/30',
+  LIVE: 'bg-green-500/15 text-green-400 border-green-500/30',
+  DEGRADED: 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+}
+
+const MODE_DOT = {
+  MOCK: 'bg-sea-400',
+  LIVE: 'bg-green-400 blink',
+  DEGRADED: 'bg-amber-400 blink'
+}
+
+export default function Header({ decisionCount, lastUpdated, mode = 'MOCK' }) {
   const [tick, setTick] = useState(0)
 
   useEffect(() => {
@@ -48,11 +59,13 @@ export default function Header({ decisionCount, lastUpdated }) {
           <span>Updated {updatedTime}</span>
         </div>
 
-        <span className="chip bg-sea-400/15 text-sea-400 border border-sea-400/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-sea-400" />
-          {MODE} MODE
+        {/* Dynamic mode badge — MOCK / LIVE / DEGRADED */}
+        <span className={`chip border ${MODE_CHIP[mode] || MODE_CHIP.MOCK}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${MODE_DOT[mode] || MODE_DOT.MOCK}`} />
+          {mode} MODE
         </span>
 
+        {/* All data is simulated badge */}
         <span className="chip bg-navy-700/60 text-navy-300 border border-navy-600/50">
           <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" /><path d="M12 8v4m0 4h.01" />

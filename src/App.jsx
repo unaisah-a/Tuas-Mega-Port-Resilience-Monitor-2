@@ -8,9 +8,9 @@ import { buildRecommendation, buildScenarioRecommendation, SCENARIOS } from './e
 import {
   getSnapshot,
   forceStorm, clearStorm,
-  forceCongestion, clearCongestion,
-  isStormForced, isCongestionForced
+  forceCongestion, clearCongestion
 } from './data/simulation.js'
+import { DEFAULT_MODEL } from './agent/liveBrain.js'
 
 const STORAGE_KEY = 'tmprm_decision_history'
 
@@ -23,10 +23,12 @@ export default function App() {
   const [stormActive, setStormActive] = useState(false)
   const [congestionActive, setCongestionActive] = useState(false)
 
-  // Refresh snapshot (called after forcing storm/congestion)
-  const refreshSnapshot = useCallback(() => {
-    setSnapshot(getSnapshot())
-  }, [])
+  // ─── Mode state (MOCK / LIVE / DEGRADED) ────────────────────────────────────
+  const [mode, setMode] = useState('MOCK')        // 'MOCK' | 'LIVE' | 'DEGRADED'
+  const [apiKey, setApiKey] = useState('')
+  const [llmModel, setLlmModel] = useState(DEFAULT_MODEL)
+
+  const refreshSnapshot = useCallback(() => setSnapshot(getSnapshot()), [])
 
   useEffect(() => {
     try {
@@ -41,9 +43,7 @@ export default function App() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)) } catch {}
   }
 
-  const handleLog = (entry) => {
-    persistHistory([entry, ...history].slice(0, 50))
-  }
+  const handleLog = (entry) => persistHistory([entry, ...history].slice(0, 50))
 
   const handleRecommendation = (rec, scenarioId) => {
     setRecommendation(rec)
@@ -72,14 +72,12 @@ export default function App() {
     if (confirm('Clear all logged decisions?')) persistHistory([])
   }
 
-  // Storm toggle — wired for Stage 2+ use
   const toggleStorm = () => {
     if (stormActive) { clearStorm(); setStormActive(false) }
     else { forceStorm(); setStormActive(true) }
     refreshSnapshot()
   }
 
-  // Congestion toggle — wired for Stage 2+ use
   const toggleCongestion = () => {
     if (congestionActive) { clearCongestion(); setCongestionActive(false) }
     else { forceCongestion(); setCongestionActive(true) }
@@ -88,7 +86,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-navy-950">
-      <Header decisionCount={history.length} lastUpdated={snapshot.generatedAt} />
+      <Header
+        decisionCount={history.length}
+        lastUpdated={snapshot.generatedAt}
+        mode={mode}
+      />
 
       {/* Scenario + simulation control bar */}
       <div className="bg-navy-800/60 border-b border-navy-600/40 px-4 py-2 flex items-center gap-2 overflow-x-auto">
@@ -117,7 +119,6 @@ export default function App() {
               ? 'bg-red-500/20 border-red-500/50 text-red-400'
               : 'bg-navy-700/40 border-navy-600/40 text-navy-300 hover:bg-navy-600/50'
           }`}
-          title="Toggle forced storm on Malacca Strait"
         >
           {stormActive ? 'Clear Storm' : 'Force Storm'}
         </button>
@@ -129,7 +130,6 @@ export default function App() {
               ? 'bg-accent-500/20 border-accent-500/50 text-accent-500'
               : 'bg-navy-700/40 border-navy-600/40 text-navy-300 hover:bg-navy-600/50'
           }`}
-          title="Toggle forced port congestion (92-95% berth occupancy)"
         >
           {congestionActive ? 'Clear Congestion' : 'Force Congestion'}
         </button>
@@ -139,16 +139,22 @@ export default function App() {
       <main className="flex-1 grid grid-cols-12 gap-3 p-3" style={{ minHeight: 0 }}>
         {/* Left: Chat advisor */}
         <div className="col-span-12 lg:col-span-3 flex flex-col" style={{ minHeight: 0 }}>
-          <ChatAdvisor onRecommendation={handleRecommendation} onSelectVessel={handleSelectVessel} />
+          <ChatAdvisor
+            onRecommendation={handleRecommendation}
+            onSelectVessel={handleSelectVessel}
+            mode={mode}
+            setMode={setMode}
+            apiKey={apiKey}
+            setApiKey={setApiKey}
+            llmModel={llmModel}
+            setLlmModel={setLlmModel}
+          />
         </div>
 
         {/* Center: Map + Decision Interface + widgets */}
         <div className="col-span-12 lg:col-span-6 flex flex-col gap-3" style={{ minHeight: 0 }}>
           <CommandMap selectedId={selectedVesselId} onSelect={handleSelectVessel} />
-
-          {/* Decision Interface — always visible, core differentiator */}
           <DecisionInterface recommendation={recommendation} onLog={handleLog} />
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <BerthOccupancyWidget snapshot={snapshot} />
             <ShipmentRiskBoard onSelectVessel={handleSelectVessel} snapshot={snapshot} />
@@ -162,7 +168,6 @@ export default function App() {
           <RouteRiskSummary snapshot={snapshot} />
           <LegendCard />
 
-          {/* Decision history */}
           <div className="card">
             <div className="card-header">
               <div className="flex items-center gap-2">
@@ -172,16 +177,12 @@ export default function App() {
                 <h3 className="text-sm font-semibold tracking-wide text-navy-50">DECISION HISTORY</h3>
               </div>
               {history.length > 0 && (
-                <button onClick={clearHistory} className="text-[10px] text-navy-300 hover:text-red-400 transition">
-                  Clear
-                </button>
+                <button onClick={clearHistory} className="text-[10px] text-navy-300 hover:text-red-400 transition">Clear</button>
               )}
             </div>
             <div className="p-2 space-y-1.5 max-h-48 overflow-y-auto">
               {history.length === 0 ? (
-                <p className="text-[11px] text-navy-300 p-2 text-center">
-                  No decisions logged. Use the Decision Interface to log.
-                </p>
+                <p className="text-[11px] text-navy-300 p-2 text-center">No decisions logged. Use the Decision Interface to log.</p>
               ) : history.map(d => (
                 <div key={d.id} className="bg-navy-900/40 border border-navy-600/30 rounded-lg px-2.5 py-1.5 slide-up">
                   <div className="flex items-center justify-between">
@@ -202,13 +203,12 @@ export default function App() {
         </div>
       </main>
 
-      {/* Bottom news ticker — uses simulation.js NEWS_TICKER */}
       <div className="px-3 pb-3">
         <NewsTicker snapshot={snapshot} />
       </div>
 
       <footer className="px-4 py-2 text-center text-[10px] text-navy-400 border-t border-navy-600/40">
-        Tuas Mega Port Resilience Monitor · Digital Orchestrator Prototype · MOCK MODE — all data simulated · Supply Chain 4.0
+        Tuas Mega Port Resilience Monitor · Digital Orchestrator Prototype · All data simulated · Supply Chain 4.0
       </footer>
     </div>
   )
