@@ -77,7 +77,7 @@ function SchematicMap({ selectedId, onSelect, snapshot, stormActive, vesselFilte
   const selectedVessel = VESSELS.find(v => v.id === selectedId)
 
   return (
-    <div className="relative" style={{ height: 300 }}>
+    <div className="relative" style={{ height: 380 }}>
       <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
         <defs>
           <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
@@ -193,7 +193,7 @@ function FoliumMap({ stormActive, congestionActive, onFoliumFail }) {
   }, [status, onFoliumFail])
 
   return (
-    <div className="relative w-full" style={{ height: 340 }}>
+    <div className="relative w-full" style={{ height: 420 }}>
       {status === 'loading' && (
         <div className="absolute inset-0 flex items-center justify-center bg-navy-900/60 z-10">
           <div className="flex items-center gap-2 text-[12px] text-navy-300">

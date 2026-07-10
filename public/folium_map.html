@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_44b7b43c57399ca23697376d501a3429 {
+                #map_d416629789fa68bb22c048be49f9d564 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -57,26 +57,26 @@
     
     <div style="
         position:fixed;bottom:40px;left:10px;z-index:9999;
-        background:rgba(8,16,32,0.90);
+        background:rgba(8,16,32,0.92);
         color:#c8d8e8;
         padding:10px 14px;border-radius:8px;
         font-size:11px;font-family:monospace;
         border:1px solid #2a4060;line-height:2;
-        pointer-events:none;max-width:210px">
+        pointer-events:none;max-width:220px">
       <div style="font-weight:bold;color:#eef2f8;font-size:12px;margin-bottom:4px">ROUTE LEGEND</div>
-      <div><span style="color:#ef4444;font-size:14px">━━</span>&nbsp; Malacca Baseline (0d)</div>
-      <div><span style="color:#f59e0b;font-size:14px">╌╌</span>&nbsp; Sunda Reroute (+2d)</div>
-      <div><span style="color:#5fb0d8;font-size:14px">┄┄</span>&nbsp; Lombok Alternate (+3.5d)</div>
+      <div><span style="color:#ef4444;font-size:15px">&#9475;</span>&nbsp; Malacca Baseline (0d)</div>
+      <div><span style="color:#f59e0b;font-size:15px">&#9480;</span>&nbsp; Sunda Reroute (+2d)</div>
+      <div><span style="color:#5fb0d8;font-size:15px">&#9480;</span>&nbsp; Lombok Alternate (+3.5d)</div>
       <div style="margin-top:6px">
-        <span style="color:#f58220">⚓</span> Tuas Mega Port<br>
-        <span style="color:#ef4444">🚢</span> SL TRADER (Critical)<br>
-        <span style="color:#a8bbd3">⚠</span> GOLDEN STAR 1 (Incident)
+        <span style="color:#f58220">&#9670;</span> Tuas Mega Port<br>
+        <span style="color:#ef4444">&#9670;</span> SL TRADER (Critical)<br>
+        <span style="color:#888">&#9679;</span> GOLDEN STAR 1 (Incident)
       </div>
-      <div style="margin-top:6px;color:#666;font-size:10px">Hover routes &amp; markers for details</div>
+      <div style="margin-top:6px;color:#666;font-size:10px">Hover routes &amp; markers for details<br>Zoom in to see Malacca strait detail</div>
     </div>
     <div style="
         position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
-        background:rgba(8,16,32,0.85);color:#a8bbd3;
+        background:rgba(8,16,32,0.88);color:#a8bbd3;
         padding:3px 16px;border-radius:6px;
         font-size:10px;font-family:monospace;
         z-index:9999;border:1px solid #2a4060;pointer-events:none;
@@ -85,35 +85,35 @@
     </div>
     
     
-            <div class="folium-map" id="map_44b7b43c57399ca23697376d501a3429" ></div>
+            <div class="folium-map" id="map_d416629789fa68bb22c048be49f9d564" ></div>
         
 </body>
 <script>
     
     
-            var map_44b7b43c57399ca23697376d501a3429 = L.map(
-                "map_44b7b43c57399ca23697376d501a3429",
+            var map_d416629789fa68bb22c048be49f9d564 = L.map(
+                "map_d416629789fa68bb22c048be49f9d564",
                 {
-                    center: [2.5, 102.0],
+                    center: [-1.0, 106.0],
                     crs: L.CRS.EPSG3857,
                     ...{
-  "zoom": 7,
+  "zoom": 5,
   "zoomControl": true,
   "preferCanvas": true,
 }
 
                 }
             );
-            L.control.scale().addTo(map_44b7b43c57399ca23697376d501a3429);
+            L.control.scale().addTo(map_d416629789fa68bb22c048be49f9d564);
 
             
 
         
     
-            var tile_layer_d56c7cc3b5b4bd2a93d03024ccfca3b0 = L.tileLayer(
+            var tile_layer_1076de8d5a61face31913f2e93573124 = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
                 {
-  "minZoom": 5,
+  "minZoom": 4,
   "maxZoom": 14,
   "maxNativeZoom": 14,
   "noWrap": false,
@@ -127,52 +127,52 @@
             );
         
     
-            tile_layer_d56c7cc3b5b4bd2a93d03024ccfca3b0.addTo(map_44b7b43c57399ca23697376d501a3429);
+            tile_layer_1076de8d5a61face31913f2e93573124.addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            var poly_line_588da93c619c936c726a47259b61c93a = L.polyline(
-                [[5.5, 100.0], [4.8, 100.5], [4.0, 101.0], [3.5, 101.5], [2.8, 102.0], [2.0, 102.8], [1.5, 103.3], [1.3, 103.65]],
-                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ef4444", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 4}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var poly_line_6f03e4c3cc2d12d0398a242aa791d7a1 = L.polyline(
+                [[5.8, 98.6], [5.1, 99.0], [4.3, 99.4], [3.6, 100.4], [2.9, 100.9], [2.2, 101.9], [1.7, 102.9], [1.3, 103.65]],
+                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ef4444", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            poly_line_588da93c619c936c726a47259b61c93a.bindTooltip(
+            poly_line_6f03e4c3cc2d12d0398a242aa791d7a1.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7;min-width:240px"><b style="color:#ef4444; font-size:13px">Malacca Strait Baseline</b><br><hr style="border-color:#333;margin:4px 0">Delta transit: <b>0 days</b> (primary route)<br>Cost index: <b>100</b> &nbsp;|&nbsp; CO2 index: <b>100</b><br>Risk: <b style="color:#ef4444">High — Gale warning active</b><br>Cold-chain: Conditional — monitor reefer systems continuously<br>Confidence: Medium<br><i style="color:#aaa">Primary route. Gale warning active. Priority berthing for cold-chain SHP-2041/SHP-2042.</i></div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7;min-width:260px"><b style="color:#ef4444;font-size:13px">&#9664; Malacca Strait Baseline</b><br><hr style="border-color:#444;margin:4px 0">Delta transit: <b>0 days</b> (primary route)<br>Cost index: <b>100</b> &nbsp;|&nbsp; CO2 index: <b>100</b><br>Risk: <b style="color:#ef4444">High — Gale warning active</b><br>Cold-chain: Conditional — monitor reefer systems continuously<br>Confidence: Medium<br><i style="color:#aaa">Primary route. Gale warning active. Priority berthing for SHP-2041/SHP-2042.</i></div>
                  </div>`,
                 {
-  "maxWidth": 360,
+  "maxWidth": 380,
   "sticky": true,
 }
             );
         
     
-            poly_line_588da93c619c936c726a47259b61c93a.setText(
-                "  \u25ba  ",
+            poly_line_6f03e4c3cc2d12d0398a242aa791d7a1.setText(
+                " \u25ba ",
                 {
   "repeat": true,
   "center": false,
   "below": false,
-  "offset": 18,
+  "offset": 20,
   "orientation": 0,
   "attributes": {
   "fill": "#ef4444",
   "font-size": "14",
-  "opacity": "0.85",
+  "opacity": "0.9",
 },
 }
             );
         
     
-            var circle_marker_033306ccf55da4504cde34c392ec64c3 = L.circleMarker(
-                [4.8, 100.5],
-                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_f9d65839eab13033866a564d0fe95ef6 = L.circleMarker(
+                [5.8, 98.6],
+                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_033306ccf55da4504cde34c392ec64c3.bindTooltip(
+            circle_marker_f9d65839eab13033866a564d0fe95ef6.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 06:12 UTC | Status: En route<br>Lat: 4.800° &nbsp; Lon: 100.500°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 06:14 UTC | Status: En route<br>Lat: 5.800&deg; &nbsp; Lon: 98.600&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -180,15 +180,15 @@
             );
         
     
-            var circle_marker_230c74bdfc6a10dd8b5ef917e273a464 = L.circleMarker(
-                [4.0, 101.0],
-                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_22e05e63c63b7270ec12910797115a19 = L.circleMarker(
+                [4.3, 99.4],
+                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_230c74bdfc6a10dd8b5ef917e273a464.bindTooltip(
+            circle_marker_22e05e63c63b7270ec12910797115a19.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 09:45 UTC | Status: En route<br>Lat: 4.000° &nbsp; Lon: 101.000°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 10:02 UTC | Status: En route<br>Lat: 4.300&deg; &nbsp; Lon: 99.400&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -196,15 +196,15 @@
             );
         
     
-            var circle_marker_c60ef53790a8afec9b798093e3aa1bde = L.circleMarker(
-                [3.5, 101.5],
-                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_84924bf923238fd20af15654daf7bbb3 = L.circleMarker(
+                [3.6, 100.4],
+                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_c60ef53790a8afec9b798093e3aa1bde.bindTooltip(
+            circle_marker_84924bf923238fd20af15654daf7bbb3.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 13:20 UTC | Status: En route<br>Lat: 3.500° &nbsp; Lon: 101.500°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 14:37 UTC | Status: En route<br>Lat: 3.600&deg; &nbsp; Lon: 100.400&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -212,15 +212,15 @@
             );
         
     
-            var circle_marker_d4ea0e8e86bb8c7d9fcd30e9afb003fd = L.circleMarker(
-                [2.8, 102.0],
-                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_b9994e83f33cdf0bd7c343b28dcd0640 = L.circleMarker(
+                [2.9, 100.9],
+                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_d4ea0e8e86bb8c7d9fcd30e9afb003fd.bindTooltip(
+            circle_marker_b9994e83f33cdf0bd7c343b28dcd0640.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 17:08 UTC | Status: En route<br>Lat: 2.800° &nbsp; Lon: 102.000°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 19:55 UTC | Status: En route<br>Lat: 2.900&deg; &nbsp; Lon: 100.900&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -228,15 +228,15 @@
             );
         
     
-            var circle_marker_8b9ac4127e96282f8f18e5d40d7619da = L.circleMarker(
-                [2.0, 102.8],
-                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_178fff1b18c889781eb15a735e3a182a = L.circleMarker(
+                [2.2, 101.9],
+                {"bubblingMouseEvents": true, "color": "#ef4444", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ef4444", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_8b9ac4127e96282f8f18e5d40d7619da.bindTooltip(
+            circle_marker_178fff1b18c889781eb15a735e3a182a.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 21:33 UTC | Status: En route<br>Lat: 2.000° &nbsp; Lon: 102.800°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#ef4444">Malacca GPS ping</b><br>Sim time: 01:08 UTC | Status: En route<br>Lat: 2.200&deg; &nbsp; Lon: 101.900&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -244,49 +244,49 @@
             );
         
     
-            var poly_line_fd86c4a425c6a48e93cdc8c6aa8a08ac = L.polyline(
-                [[5.5, 100.0], [3.8, 99.2], [1.5, 98.8], [0.0, 99.5], [-2.0, 101.0], [-4.0, 103.5], [-5.5, 105.8], [-4.5, 107.0], [-2.0, 107.5], [0.5, 106.0], [1.3, 103.65]],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": "7 4", "dashOffset": null, "fill": false, "fillColor": "#f59e0b", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var poly_line_1dfbd224b7f215355f619f453ca0d5b6 = L.polyline(
+                [[5.8, 98.6], [4.5, 97.5], [2.5, 96.5], [0.5, 97.0], [-2.0, 99.0], [-4.5, 103.0], [-5.5, 105.8], [-4.8, 107.5], [-2.5, 108.5], [0.0, 107.0], [1.0, 105.5], [1.3, 103.65]],
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": "7 4", "dashOffset": null, "fill": false, "fillColor": "#f59e0b", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            poly_line_fd86c4a425c6a48e93cdc8c6aa8a08ac.bindTooltip(
+            poly_line_1dfbd224b7f215355f619f453ca0d5b6.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7;min-width:240px"><b style="color:#f59e0b; font-size:13px">Sunda Strait Reroute — Contingency</b><br><hr style="border-color:#333;margin:4px 0">Delta transit: <b>+2 days</b><br>Cost index: <b>118</b> (×1.18) &nbsp;|&nbsp; CO2 index: <b>115</b> (×1.15)<br>Risk: <b style="color:#f59e0b">Medium — calm seas</b><br>Cold-chain: <b style="color:#22c55e">YES</b> — reefer monitoring intact, 2-8°C suitable<br>Confidence: High<br><i style="color:#aaa">Preferred reroute when Malacca is disrupted. Calmer seas, suitable for cold-chain pharma.</i></div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7;min-width:260px"><b style="color:#f59e0b;font-size:13px">&#9664; Sunda Strait Reroute — Contingency</b><br><hr style="border-color:#444;margin:4px 0">Delta transit: <b>+2 days</b><br>Cost index: <b>118</b> (&times;1.18) &nbsp;|&nbsp; CO2 index: <b>115</b> (&times;1.15)<br>Risk: <b style="color:#f59e0b">Medium — calm seas</b><br>Cold-chain: <b style="color:#22c55e">YES</b> — 2-8&deg;C suitable, reefer monitoring intact<br>Confidence: High<br><i style="color:#aaa">Preferred reroute when Malacca is disrupted. Recommended for SHP-2041/SHP-2042.</i></div>
                  </div>`,
                 {
-  "maxWidth": 360,
+  "maxWidth": 380,
   "sticky": true,
 }
             );
         
     
-            poly_line_fd86c4a425c6a48e93cdc8c6aa8a08ac.setText(
-                "  \u25ba  ",
+            poly_line_1dfbd224b7f215355f619f453ca0d5b6.setText(
+                " \u25ba ",
                 {
   "repeat": true,
   "center": false,
   "below": false,
-  "offset": 18,
+  "offset": 20,
   "orientation": 0,
   "attributes": {
   "fill": "#f59e0b",
   "font-size": "14",
-  "opacity": "0.85",
+  "opacity": "0.9",
 },
 }
             );
         
     
-            var circle_marker_a269c888e2143365c15460611b1927fe = L.circleMarker(
-                [3.8, 99.2],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_d6e1ff88ddedabca6930b7a1b0404958 = L.circleMarker(
+                [4.5, 97.5],
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_a269c888e2143365c15460611b1927fe.bindTooltip(
+            circle_marker_d6e1ff88ddedabca6930b7a1b0404958.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 06:12 UTC | Status: En route<br>Lat: 3.800° &nbsp; Lon: 99.200°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 06:14 UTC | Status: En route<br>Lat: 4.500&deg; &nbsp; Lon: 97.500&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -294,15 +294,15 @@
             );
         
     
-            var circle_marker_1ff6eb15f3ec68901b1bd7f9af104e31 = L.circleMarker(
-                [0.0, 99.5],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_35709f32c320a9d25fef0494db1a5c16 = L.circleMarker(
+                [0.5, 97.0],
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_1ff6eb15f3ec68901b1bd7f9af104e31.bindTooltip(
+            circle_marker_35709f32c320a9d25fef0494db1a5c16.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 09:45 UTC | Status: En route<br>Lat: 0.000° &nbsp; Lon: 99.500°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 10:02 UTC | Status: En route<br>Lat: 0.500&deg; &nbsp; Lon: 97.000&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -310,15 +310,15 @@
             );
         
     
-            var circle_marker_691824451c6e65cf97d4d8ce902f0721 = L.circleMarker(
-                [-4.0, 103.5],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_e3feb6a1dfc9c39c865dc61d44cca752 = L.circleMarker(
+                [-4.5, 103.0],
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_691824451c6e65cf97d4d8ce902f0721.bindTooltip(
+            circle_marker_e3feb6a1dfc9c39c865dc61d44cca752.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 13:20 UTC | Status: En route<br>Lat: -4.000° &nbsp; Lon: 103.500°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 14:37 UTC | Status: En route<br>Lat: -4.500&deg; &nbsp; Lon: 103.000&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -326,15 +326,15 @@
             );
         
     
-            var circle_marker_244ec713f7bcaccd9d8b83dec8ee60f3 = L.circleMarker(
-                [-4.5, 107.0],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_df49a20d86c15b84660b667498e89f73 = L.circleMarker(
+                [-4.8, 107.5],
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_244ec713f7bcaccd9d8b83dec8ee60f3.bindTooltip(
+            circle_marker_df49a20d86c15b84660b667498e89f73.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 17:08 UTC | Status: En route<br>Lat: -4.500° &nbsp; Lon: 107.000°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 19:55 UTC | Status: En route<br>Lat: -4.800&deg; &nbsp; Lon: 107.500&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -342,15 +342,15 @@
             );
         
     
-            var circle_marker_941a00594ae8645f0e7f4a91af6f25f3 = L.circleMarker(
-                [-2.0, 107.5],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_014ed954f46e595166fe5d437573053c = L.circleMarker(
+                [0.0, 107.0],
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_941a00594ae8645f0e7f4a91af6f25f3.bindTooltip(
+            circle_marker_014ed954f46e595166fe5d437573053c.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 21:33 UTC | Status: En route<br>Lat: -2.000° &nbsp; Lon: 107.500°</div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#f59e0b">Sunda GPS ping</b><br>Sim time: 01:08 UTC | Status: En route<br>Lat: 0.000&deg; &nbsp; Lon: 107.000&deg;</div>
                  </div>`,
                 {
   "sticky": false,
@@ -358,15 +358,154 @@
             );
         
     
-            var poly_line_4e474ed6078f9a5d4282e6933cab4df8 = L.polyline(
-                [[5.5, 100.0], [3.0, 99.0], [0.0, 99.0], [-3.0, 101.5], [-6.0, 106.0], [-7.5, 111.0], [-8.7, 115.7], [-8.0, 114.5], [-5.5, 112.0], [-2.5, 109.0], [1.0, 104.8], [1.3, 103.65]],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": "4 5", "dashOffset": null, "fill": false, "fillColor": "#5fb0d8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var poly_line_cbd388f63bcba189f536e967fc8d3b97 = L.polyline(
+                [[5.8, 98.6], [3.5, 97.0], [0.0, 96.5], [-3.0, 100.0], [-5.5, 104.5], [-7.0, 108.5], [-7.8, 112.0], [-8.5, 115.5], [-7.5, 117.0], [-5.0, 115.0], [-2.0, 112.0], [0.5, 108.0], [1.0, 105.0], [1.3, 103.65]],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": "4 5", "dashOffset": null, "fill": false, "fillColor": "#5fb0d8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            poly_line_4e474ed6078f9a5d4282e6933cab4df8.bindTooltip(
+            poly_line_cbd388f63bcba189f536e967fc8d3b97.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7;min-width:240px"><b style="color:#5fb0d8; font-size:13px">Lombok Strait Deep Alternate</b><br><hr style="border-color:#333;margin:4px 0">Delta transit: <b>+3.5 days</b><br>Cost index: <b>126</b> (×1.26) &nbsp;|&nbsp; CO2 index: <b>124</b> (×1.24)<br>Risk: <b style="color:#22c55e">Low — clear seas</b><br>Cold-chain: <b style="color:#f59e0b">CONDITIONAL</b> — +3.5 days may breach 2-8°C service window.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Human validation required</b> for pharma cargo.<br>Confidence: Medium (human validation required)<br><i style="color:#aaa">Longest alternate. Use only if Malacca AND Sunda are unavailable. Highest CO2 of all sea routes.</i></div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7;min-width:260px"><b style="color:#5fb0d8;font-size:13px">&#9664; Lombok Strait Deep Alternate</b><br><hr style="border-color:#444;margin:4px 0">Delta transit: <b>+3.5 days</b><br>Cost index: <b>126</b> (&times;1.26) &nbsp;|&nbsp; CO2 index: <b>124</b> (&times;1.24)<br>Risk: <b style="color:#22c55e">Low — clear seas</b><br>Cold-chain: <b style="color:#f59e0b">CONDITIONAL</b> — +3.5 days may breach 2-8&deg;C service window<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Human validation required</b> for pharma cargo<br>Confidence: Medium<br><i style="color:#aaa">Longest alternate. Use only if Malacca AND Sunda are unavailable. Highest CO2.</i></div>
+                 </div>`,
+                {
+  "maxWidth": 380,
+  "sticky": true,
+}
+            );
+        
+    
+            poly_line_cbd388f63bcba189f536e967fc8d3b97.setText(
+                " \u25ba ",
+                {
+  "repeat": true,
+  "center": false,
+  "below": false,
+  "offset": 20,
+  "orientation": 0,
+  "attributes": {
+  "fill": "#5fb0d8",
+  "font-size": "14",
+  "opacity": "0.9",
+},
+}
+            );
+        
+    
+            var circle_marker_64a1440b9b515c7a63d871ddcd756896 = L.circleMarker(
+                [3.5, 97.0],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            circle_marker_64a1440b9b515c7a63d871ddcd756896.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 06:14 UTC | Status: En route<br>Lat: 3.500&deg; &nbsp; Lon: 97.000&deg;</div>
+                 </div>`,
+                {
+  "sticky": false,
+}
+            );
+        
+    
+            var circle_marker_72aa1a28900080894af67746d5b6f786 = L.circleMarker(
+                [-3.0, 100.0],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            circle_marker_72aa1a28900080894af67746d5b6f786.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 10:02 UTC | Status: En route<br>Lat: -3.000&deg; &nbsp; Lon: 100.000&deg;</div>
+                 </div>`,
+                {
+  "sticky": false,
+}
+            );
+        
+    
+            var circle_marker_b67c129024b309ed65bf6109b3df0149 = L.circleMarker(
+                [-7.0, 108.5],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            circle_marker_b67c129024b309ed65bf6109b3df0149.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 14:37 UTC | Status: En route<br>Lat: -7.000&deg; &nbsp; Lon: 108.500&deg;</div>
+                 </div>`,
+                {
+  "sticky": false,
+}
+            );
+        
+    
+            var circle_marker_ffc53fb9073763e8b67050b51c5e4a9a = L.circleMarker(
+                [-8.5, 115.5],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            circle_marker_ffc53fb9073763e8b67050b51c5e4a9a.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 19:55 UTC | Status: En route<br>Lat: -8.500&deg; &nbsp; Lon: 115.500&deg;</div>
+                 </div>`,
+                {
+  "sticky": false,
+}
+            );
+        
+    
+            var circle_marker_edfaa9c4d6bdcd4afe8fed19c08ec64f = L.circleMarker(
+                [-5.0, 115.0],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            circle_marker_edfaa9c4d6bdcd4afe8fed19c08ec64f.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 01:08 UTC | Status: En route<br>Lat: -5.000&deg; &nbsp; Lon: 115.000&deg;</div>
+                 </div>`,
+                {
+  "sticky": false,
+}
+            );
+        
+    
+            var circle_marker_1ad6e093e58eba9351d486cabd81eef8 = L.circleMarker(
+                [0.5, 108.0],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            circle_marker_1ad6e093e58eba9351d486cabd81eef8.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 05:43 UTC | Status: En route<br>Lat: 0.500&deg; &nbsp; Lon: 108.000&deg;</div>
+                 </div>`,
+                {
+  "sticky": false,
+}
+            );
+        
+    
+            var marker_c9d628c275f20743993b54432a87fb60 = L.marker(
+                [1.3, 103.65],
+                {
+}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
+        
+    
+            var div_icon_3bab6f7bc0f579c8ad0886c32a7fb9fe = L.divIcon({
+  "html": "\u003cdiv style=\"width:16px;height:16px;background:#f58220;border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 8px #f58220;\"\u003e\u003c/div\u003e",
+  "iconSize": [16, 16],
+  "iconAnchor": [8, 8],
+  "className": "",
+});
+        
+    
+            marker_c9d628c275f20743993b54432a87fb60.bindTooltip(
+                `<div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#f58220">&#9875; Tuas Mega Port — Destination</b><br>1.300&deg;N, 103.650&deg;E &nbsp;|&nbsp; Singapore<br>Berth occupancy: <b>Normal 70-80%</b><br>Status: Active port operations<br><i style="color:#aaa">Priority berthing for cold-chain pharma (SHP-2041, SHP-2042)</i></div>
                  </div>`,
                 {
   "maxWidth": 360,
@@ -375,174 +514,47 @@
             );
         
     
-            poly_line_4e474ed6078f9a5d4282e6933cab4df8.setText(
-                "  \u25ba  ",
+                marker_c9d628c275f20743993b54432a87fb60.setIcon(div_icon_3bab6f7bc0f579c8ad0886c32a7fb9fe);
+            
+    
+            var marker_9a2ac20e030f85f9684cf4eb73ec47b9 = L.marker(
+                [2.9, 100.9],
                 {
-  "repeat": true,
-  "center": false,
-  "below": false,
-  "offset": 18,
-  "orientation": 0,
-  "attributes": {
-  "fill": "#5fb0d8",
-  "font-size": "14",
-  "opacity": "0.85",
-},
 }
-            );
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            var circle_marker_c480d0acc00c20f4cc8ac8be7e01805b = L.circleMarker(
-                [3.0, 99.0],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var div_icon_ff29eb18f45278df34698a72fcb84c57 = L.divIcon({
+  "html": "\u003cdiv style=\"width:16px;height:16px;background:#ef4444;border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 8px #ef4444;\"\u003e\u003c/div\u003e",
+  "iconSize": [16, 16],
+  "iconAnchor": [8, 8],
+  "className": "",
+});
         
     
-            circle_marker_c480d0acc00c20f4cc8ac8be7e01805b.bindTooltip(
+            marker_9a2ac20e030f85f9684cf4eb73ec47b9.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 06:12 UTC | Status: En route<br>Lat: 3.000° &nbsp; Lon: 99.000°</div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#ef4444">&#9664; SL TRADER (SHP-2041)</b><br>IMO: IMO9874321<br>Cargo: Pharmaceuticals — Insulin &amp; Vaccines<br>Temperature: <b>2-8&deg;C</b> (CRITICAL cold-chain)<br>Origin: Rotterdam, Netherlands<br>Current: Malacca Strait — 38 nm from Tuas anchorage<br>ETA: <b>6h</b> &nbsp;|&nbsp; Status: <b style="color:#ef4444">Critical</b><br><b style="color:#ef4444">Inventory risk: Stockout in 18h — priority berthing required</b></div>
                  </div>`,
                 {
-  "sticky": false,
-}
-            );
-        
-    
-            var circle_marker_b81703a4a81ddfb897327a116627ea55 = L.circleMarker(
-                [-3.0, 101.5],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
-        
-    
-            circle_marker_b81703a4a81ddfb897327a116627ea55.bindTooltip(
-                `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 09:45 UTC | Status: En route<br>Lat: -3.000° &nbsp; Lon: 101.500°</div>
-                 </div>`,
-                {
-  "sticky": false,
-}
-            );
-        
-    
-            var circle_marker_ec6fe6cf2186e11d596befa40005ded5 = L.circleMarker(
-                [-7.5, 111.0],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
-        
-    
-            circle_marker_ec6fe6cf2186e11d596befa40005ded5.bindTooltip(
-                `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 13:20 UTC | Status: En route<br>Lat: -7.500° &nbsp; Lon: 111.000°</div>
-                 </div>`,
-                {
-  "sticky": false,
-}
-            );
-        
-    
-            var circle_marker_30532c2147c9c9779fa267219a9118e0 = L.circleMarker(
-                [-8.0, 114.5],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
-        
-    
-            circle_marker_30532c2147c9c9779fa267219a9118e0.bindTooltip(
-                `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 17:08 UTC | Status: En route<br>Lat: -8.000° &nbsp; Lon: 114.500°</div>
-                 </div>`,
-                {
-  "sticky": false,
-}
-            );
-        
-    
-            var circle_marker_811e5963eacc271913a9a12acf7f6d8c = L.circleMarker(
-                [-2.5, 109.0],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1.5}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
-        
-    
-            circle_marker_811e5963eacc271913a9a12acf7f6d8c.bindTooltip(
-                `<div>
-                     <div style="font-family:monospace;font-size:11px;line-height:1.5"><b style="color:#5fb0d8">Lombok GPS ping</b><br>Sim time: 21:33 UTC | Status: En route<br>Lat: -2.500° &nbsp; Lon: 109.000°</div>
-                 </div>`,
-                {
-  "sticky": false,
-}
-            );
-        
-    
-            var marker_433176b3bca57ddd14eaeec3b4323749 = L.marker(
-                [1.3, 103.65],
-                {
-}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
-        
-    
-            var icon_272c080dea68c9c875f074ed0b62b7fa = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "orange",
-  "iconColor": "white",
-  "icon": "anchor",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-            marker_433176b3bca57ddd14eaeec3b4323749.bindTooltip(
-                `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#f58220">⚓ Tuas Mega Port — Destination</b><br>1.300°N, 103.650°E &nbsp;|&nbsp; Singapore<br>Berth occupancy: <b>Normal 70-80%</b><br>Status: Active port operations<br><i style="color:#aaa">Priority berthing for cold-chain pharma (SHP-2041, SHP-2042)</i></div>
-                 </div>`,
-                {
+  "maxWidth": 360,
   "sticky": true,
 }
             );
         
     
-                marker_433176b3bca57ddd14eaeec3b4323749.setIcon(icon_272c080dea68c9c875f074ed0b62b7fa);
+                marker_9a2ac20e030f85f9684cf4eb73ec47b9.setIcon(div_icon_ff29eb18f45278df34698a72fcb84c57);
             
     
-            var marker_68dff7ac58799601d30643ae767711e7 = L.marker(
-                [3.5, 101.5],
-                {
-}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
-        
-    
-            var icon_1ef67a8e53f12fae9bbb2929ffa5ab9a = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "red",
-  "iconColor": "white",
-  "icon": "ship",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-            marker_68dff7ac58799601d30643ae767711e7.bindTooltip(
-                `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#ef4444">🚢 SL TRADER (SHP-2041)</b><br>IMO: IMO9874321<br>Cargo: Pharmaceuticals — Insulin &amp; Vaccines<br>Temperature: <b>2-8°C</b> (CRITICAL cold-chain)<br>Origin: Rotterdam, Netherlands<br>Current: Malacca Strait — 38 nm from Tuas anchorage<br>ETA: <b>6h</b> &nbsp;|&nbsp; Status: <b style="color:#ef4444">Critical</b><br><b style="color:#ef4444">Inventory risk: Stockout in 18h — priority berthing required</b></div>
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-                marker_68dff7ac58799601d30643ae767711e7.setIcon(icon_1ef67a8e53f12fae9bbb2929ffa5ab9a);
-            
-    
-            var circle_marker_5b867a5676ee4c60853574261721cded = L.circleMarker(
-                [2.8, 100.8],
+            var circle_marker_63d04aa7da3b0e1ff6ad9457911364c8 = L.circleMarker(
+                [4.3, 99.4],
                 {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_5b867a5676ee4c60853574261721cded.bindTooltip(
+            circle_marker_63d04aa7da3b0e1ff6ad9457911364c8.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#f59e0b">AURORA PIONEER (SHP-2042)</b><br>Cargo: Biologics — COVID-19 Antivirals &amp; Blood Products<br>Temperature: <b>2-8°C</b> (Critical cold-chain)<br>Origin: Hamburg, Germany<br>Current: Malacca Strait — 190 nm west of Singapore<br>ETA: <b>18h</b> &nbsp;|&nbsp; Status: Watch</div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#f59e0b">AURORA PIONEER (SHP-2042)</b><br>Cargo: Biologics — COVID-19 Antivirals &amp; Blood Products<br>Temperature: <b>2-8&deg;C</b> (Critical cold-chain)<br>Origin: Hamburg, Germany<br>Current: Malacca Strait — 190 nm west of Singapore<br>ETA: <b>18h</b> &nbsp;|&nbsp; Status: Watch</div>
                  </div>`,
                 {
   "sticky": true,
@@ -550,27 +562,15 @@
             );
         
     
-            var marker_43c28036ef26418d46018183cd3e98d8 = L.marker(
+            var circle_marker_224a2d682dd1d5e4554d307167b9445c = L.circleMarker(
                 [1.05, 104.05],
-                {
-}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+                {"bubblingMouseEvents": true, "color": "#888", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#555", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            var icon_65d31b59b01587aa1753a67ae9bb354b = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "gray",
-  "iconColor": "white",
-  "icon": "exclamation-triangle",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-            marker_43c28036ef26418d46018183cd3e98d8.bindTooltip(
+            circle_marker_224a2d682dd1d5e4554d307167b9445c.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#a8bbd3">⚠ GOLDEN STAR 1 — Simulated Incident</b><br>Location: Near Batam Island (1.050°N, 104.050°E)<br>Event: Vessel grounded on shoal — 5 Jun 2026<br>Status: <b>All 22 crew rescued.</b> MPA investigation ongoing.<br><span style="color:#f59e0b">Operational note:</span> Monitor for regional disruption.<br>No confirmed impact on Tuas port operations at this time.</div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b style="color:#a8bbd3">&#9888; GOLDEN STAR 1 — Simulated Incident</b><br>Location: Near Batam Island (1.050&deg;N, 104.050&deg;E)<br>Event: Vessel grounded on shoal — 5 Jun 2026<br>Status: <b>All 22 crew rescued.</b> MPA investigation ongoing.<br><span style="color:#f59e0b">Operational note:</span> Monitor for regional disruption.<br>No confirmed impact on Tuas port operations at this time.</div>
                  </div>`,
                 {
   "sticky": true,
@@ -578,49 +578,44 @@
             );
         
     
-                marker_43c28036ef26418d46018183cd3e98d8.setIcon(icon_65d31b59b01587aa1753a67ae9bb354b);
-            
-    
-            var marker_50c77c84d30ef8b87d74b701cbce9b9b = L.marker(
-                [5.5, 100.0],
+            var marker_b6a1014a2bf74dc321552d3c11cd6694 = L.marker(
+                [5.8, 98.6],
                 {
 }
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            var icon_7432fa0240545b0928a51367485fca0a = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "blue",
-  "iconColor": "white",
-  "icon": "play",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
+            var div_icon_d6e7a79b91c6973dae78c28589523a5a = L.divIcon({
+  "html": "\u003cdiv style=\"width:14px;height:14px;border-radius:50%;background:#5fb0d8;border:2px solid #fff;box-shadow:0 0 6px #5fb0d8;\"\u003e\u003c/div\u003e",
+  "iconSize": [14, 14],
+  "iconAnchor": [7, 7],
+  "className": "",
+});
         
     
-            marker_50c77c84d30ef8b87d74b701cbce9b9b.bindTooltip(
+            marker_b6a1014a2bf74dc321552d3c11cd6694.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b>Route Divergence — N. Malacca Strait (Langkawi)</b><br>5.50°N, 100.00°E<br><span style="color:#ef4444">━</span> Malacca baseline: 0 days delta<br><span style="color:#f59e0b">╌</span> Sunda reroute: +2 days<br><span style="color:#5fb0d8">┄</span> Lombok alternate: +3.5 days</div>
+                     <div style="font-family:monospace;font-size:12px;line-height:1.7"><b>Route Divergence — N. Malacca Strait</b><br>5.80&deg;N, 98.60&deg;E — between N.Sumatra and Langkawi<br><span style="color:#ef4444">&#9474;</span> Malacca baseline: 0 days<br><span style="color:#f59e0b">&#8213;</span> Sunda reroute: +2 days<br><span style="color:#5fb0d8">&#8229;</span> Lombok alternate: +3.5 days</div>
                  </div>`,
                 {
+  "maxWidth": 360,
   "sticky": true,
 }
             );
         
     
-                marker_50c77c84d30ef8b87d74b701cbce9b9b.setIcon(icon_7432fa0240545b0928a51367485fca0a);
+                marker_b6a1014a2bf74dc321552d3c11cd6694.setIcon(div_icon_d6e7a79b91c6973dae78c28589523a5a);
             
     
-            var circle_marker_edd143d157973668a2da3c0d42cb2aee = L.circleMarker(
+            var circle_marker_25799d2ab7adaa37637cdddbdc080560 = L.circleMarker(
                 [-5.5, 105.8],
-                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 2}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+                {"bubblingMouseEvents": true, "color": "#f59e0b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_edd143d157973668a2da3c0d42cb2aee.bindTooltip(
+            circle_marker_25799d2ab7adaa37637cdddbdc080560.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px"><b style="color:#f59e0b">Sunda Strait</b><br>Between Java and Sumatra<br>Contingency route transit point (+2d)</div>
+                     <div style="font-family:monospace;font-size:11px"><b style="color:#f59e0b">Sunda Strait</b><br>Between Sumatra (west) and Java (east)<br>Contingency reroute transit point (+2d)</div>
                  </div>`,
                 {
   "sticky": false,
@@ -628,15 +623,15 @@
             );
         
     
-            var circle_marker_708e330384a5f38411290c594f25668e = L.circleMarker(
-                [-8.7, 115.7],
-                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 2}
-            ).addTo(map_44b7b43c57399ca23697376d501a3429);
+            var circle_marker_e2c4e63c863195ddf92c59e72dff7b82 = L.circleMarker(
+                [-8.5, 115.5],
+                {"bubblingMouseEvents": true, "color": "#5fb0d8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5fb0d8", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_d416629789fa68bb22c048be49f9d564);
         
     
-            circle_marker_708e330384a5f38411290c594f25668e.bindTooltip(
+            circle_marker_e2c4e63c863195ddf92c59e72dff7b82.bindTooltip(
                 `<div>
-                     <div style="font-family:monospace;font-size:11px"><b style="color:#5fb0d8">Lombok Strait</b><br>Between Bali and Lombok<br>Deep alternate transit point (+3.5d)</div>
+                     <div style="font-family:monospace;font-size:11px"><b style="color:#5fb0d8">Lombok Strait</b><br>Between Bali (west) and Lombok (east)<br>Deep alternate transit point (+3.5d)</div>
                  </div>`,
                 {
   "sticky": false,
