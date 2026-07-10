@@ -641,7 +641,7 @@ export const QUICK_QUESTIONS = [
   },
   {
     id: 'QQ2',
-    label: 'TC2: Berth 92%',
+    label: 'Berth Congestion',
     prompt: 'Berth occupancy has reached 92%. How can we minimise delays?'
   },
   {

@@ -376,6 +376,7 @@ export function ShipmentRiskBoard({ onSelectVessel, snapshot, vesselFilter, onSh
 
 export function RouteRiskSummary({ snapshot, stormActive, congestionActive }) {
   const simRoutes = snapshot?.routes ?? SIM_ROUTES
+  const berthPct = snapshot?.portSummary?.berthOccupancy ?? PORT.berthOccupancyPct
 
   // Dynamic risk overrides based on active simulation controls
   const getRouteRisk = (route) => {
@@ -395,9 +396,9 @@ export function RouteRiskSummary({ snapshot, stormActive, congestionActive }) {
 
   const getRouteNote = (route) => {
     if (route.id === 'R_MALACCA') {
-      if (stormActive && congestionActive) return 'SEVERE: Active storm + 92% congestion. Avoid. Divert to Sunda.'
+      if (stormActive && congestionActive) return `SEVERE: Active storm + ${berthPct}% congestion. Avoid. Divert to Sunda.`
       if (stormActive) return 'SEVERE: Storm active — gale warning. Cold-chain vessels should divert.'
-      if (congestionActive) return 'SEVERE: 92% congestion — queueing delay. Priority berth required.'
+      if (congestionActive) return `SEVERE: ${berthPct}% congestion — queueing delay. Priority berth required.`
       return route.notes
     }
     if (route.id === 'R_SUNDA') {
