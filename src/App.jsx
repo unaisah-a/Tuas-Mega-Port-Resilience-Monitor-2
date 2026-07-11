@@ -1,472 +1,151 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './components/Header.jsx'
 import ChatAdvisor from './components/ChatAdvisor.jsx'
 import CommandMap from './components/CommandMap.jsx'
 import DecisionInterface from './components/DecisionInterface.jsx'
-import WhatIfSimulator from './components/WhatIfSimulator.jsx'
 import { WeatherCard, PortSummaryCard, LegendCard, BerthOccupancyWidget, ShipmentRiskBoard, RouteRiskSummary, NewsTicker } from './components/Cards.jsx'
 import { buildRecommendation, buildScenarioRecommendation, SCENARIOS } from './engine/decisionEngine.js'
-import {
-  getSnapshot,
-  forceStorm, clearStorm,
-  forceCongestion, clearCongestion,
-  isStormForced, isCongestionForced
-} from './data/simulation.js'
-import { DEFAULT_MODEL } from './agent/liveBrain.js'
 
 const STORAGE_KEY = 'tmprm_decision_history'
-const REFRESH_INTERVAL = 8000 // 8 seconds
-
-// ─── Assessment test prompts ──────────────────────────────────────────────────
-
-const TEST_PROMPTS = [
-  {
-    id: 'A',
-    label: 'A. Weather & Cold Chain',
-    prompt: 'A tropical storm is expected in the Malacca Strait and my vessel carrying pharmaceutical products will arrive 48 hours late. What should I do?'
-  },
-  {
-    id: 'B',
-    label: 'B. Berth Congestion',
-    prompt: 'Berth occupancy has reached 92%. How can we minimise delays?'
-  },
-  {
-    id: 'C',
-    label: 'C. Information Validation',
-    prompt: 'Weather conditions are normal, but Tuas reports severe congestion. Should I reroute my shipment?'
-  },
-  {
-    id: 'D',
-    label: 'D. Multi-Disruption',
-    prompt: 'The Strait of Malacca is experiencing spillover pressure from Red Sea and Hormuz disruptions, though Malaysian ports report congestion remains manageable. Separately, the Tanzania-registered container vessel GOLDEN STAR 1 sank 6 km off Batam on 5 June 2026, with all nine crew rescued. What should we do?'
-  },
-  {
-    id: 'E',
-    label: 'E. Emergency Prioritisation',
-    prompt: 'Due to limited berth availability, we can only unload one vessel today. We have one vessel carrying pharmaceutical supplies and another carrying consumer electronics. Which should be prioritised?'
-  }
-]
-
-function DemoTestPanel({ onSend }) {
-  const [open, setOpen] = React.useState(true)
-  const [sent, setSent] = React.useState(null)
-
-  const handleSend = (prompt, id) => {
-    onSend(prompt)
-    setSent(id)
-    setTimeout(() => setSent(null), 1800)
-  }
-
-  return (
-    <div className="card">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="card-header w-full hover:bg-navy-700/30 transition"
-      >
-        <div className="flex items-center gap-2">
-          <svg className="w-4 h-4 text-sea-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <h3 className="text-sm font-semibold tracking-wide text-navy-50">ASSESSMENT TEST PROMPTS</h3>
-        </div>
-        <svg className={`w-4 h-4 text-navy-400 transition-transform ${open ? 'rotate-180' : ''}`}
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="p-2 space-y-1.5">
-          <p className="text-[10px] text-navy-400 px-1 pb-1">
-            Click a prompt to prefill the chat advisor. Send when ready to generate a structured recommendation.
-          </p>
-          {TEST_PROMPTS.map(tp => (
-            <button
-              key={tp.id}
-              onClick={() => handleSend(tp.prompt, tp.id)}
-              className={`w-full text-left px-2.5 py-2 rounded-lg border text-[11px] transition ${
-                sent === tp.id
-                  ? 'bg-green-500/15 border-green-500/30 text-green-300'
-                  : 'bg-navy-900/40 border-navy-700/40 text-navy-100 hover:bg-navy-700/50 hover:border-accent-500/30'
-              }`}
-              title={tp.prompt}
-            >
-              <span className="font-semibold text-sea-400 mr-1.5">{tp.id}</span>
-              <span>{tp.label.replace(/^[A-E]\.\s/, '')}</span>
-              {sent === tp.id && <span className="ml-1 text-green-400">✓ sent</span>}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ─── Browser notification helper ─────────────────────────────────────────────
-let notifPermission = Notification?.permission ?? 'default'
-
-async function requestNotifPermission() {
-  if (typeof Notification === 'undefined') return false
-  if (Notification.permission === 'granted') return true
-  if (Notification.permission === 'denied') return false
-  try {
-    const result = await Notification.requestPermission()
-    notifPermission = result
-    return result === 'granted'
-  } catch { return false }
-}
-
-function sendNotification(title, body) {
-  if (typeof Notification === 'undefined') return
-  if (Notification.permission !== 'granted') return
-  try { new Notification(title, { body, icon: '/favicon.svg' }) } catch {}
-}
-
-// ─── Alert decision for Decision Interface ────────────────────────────────────
-function buildAlertDecision(selectedAction, rationale, confidence = 'Medium', hvr = false) {
-  return {
-    vesselId: null,
-    vesselName: null,
-    action: selectedAction,
-    rationale,
-    confidence,
-    humanValidation: hvr,
-    tradeoffs: {
-      delay: null,
-      cost: null,
-      co2: null,
-      coldChain: 'Monitor',
-      opsRisk: confidence === 'Low' ? 'High' : 'Medium',
-      note: 'Alert generated by simulation control'
-    },
-    shipmentId: null,
-    cargo: null,
-    priority: 'HIGH',
-    coldChain: true,
-    riskLabel: { text: confidence, color: confidence === 'High' ? 'green' : confidence === 'Medium' ? 'orange' : 'red' },
-    timestamp: new Date().toISOString()
-  }
-}
 
 export default function App() {
   const [selectedVesselId, setSelectedVesselId] = useState('SL_TRADER')
   const [recommendation, setRecommendation] = useState(null)
   const [activeScenario, setActiveScenario] = useState(null)
   const [history, setHistory] = useState([])
-  const [snapshot, setSnapshot] = useState(() => getSnapshot())
-  const [stormActive, setStormActive] = useState(false)
-  const [congestionActive, setCongestionActive] = useState(false)
-  const [activeRouteId, setActiveRouteId] = useState(null)
 
-  // ─── Mode state ──────────────────────────────────────────────────────────────
-  const [mode, setMode] = useState('MOCK')
-  const [apiKey, setApiKey] = useState('')
-  const [llmModel, setLlmModel] = useState(DEFAULT_MODEL)
-
-  // ─── Filters ─────────────────────────────────────────────────────────────────
-  const [weatherFilter, setWeatherFilter] = useState('all')      // 'all' | 'high-risk'
-  const [vesselFilter, setVesselFilter] = useState('all')         // 'all' | 'cold-chain' | 'general'
-
-  // ─── What-if simulator visibility ────────────────────────────────────────────
-  const [showSimulator, setShowSimulator] = useState(true)
-
-  // ─── Chat prefill & push-alert ref ───────────────────────────────────────────
-  const chatRef = useRef(null)
-
-  const pushChatAlert = useCallback((text) => {
-    chatRef.current?.pushAlert(text)
-  }, [])
-
-  const prefillChat = useCallback((text) => {
-    chatRef.current?.prefill(text)
-  }, [])
-
-  const refreshSnapshot = useCallback(() => setSnapshot(getSnapshot()), [])
-
-  // ─── 8-second auto-refresh ───────────────────────────────────────────────────
-  useEffect(() => {
-    const t = setInterval(refreshSnapshot, REFRESH_INTERVAL)
-    return () => clearInterval(t)
-  }, [refreshSnapshot])
-
-  // ─── Init ────────────────────────────────────────────────────────────────────
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) setHistory(JSON.parse(stored))
     } catch {}
+    // Initial recommendation for default vessel
     setRecommendation(buildRecommendation('SL_TRADER'))
-    // Silently request notification permission on load
-    requestNotifPermission().catch(() => {})
   }, [])
 
-  const persistHistory = useCallback((entries) => {
+  const persistHistory = (entries) => {
     setHistory(entries)
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)) } catch {}
-  }, [])
+  }
 
-  const handleLog = useCallback((entry) => {
+  const handleLog = (entry) => {
     persistHistory([entry, ...history].slice(0, 50))
-  }, [history, persistHistory])
+  }
 
-  const handleRecommendation = useCallback((rec, scenarioId) => {
+  const handleRecommendation = (rec, scenarioId) => {
     setRecommendation(rec)
     if (scenarioId) {
       setActiveScenario(scenarioId)
       const sc = SCENARIOS.find(s => s.id === scenarioId)
       if (sc) setSelectedVesselId(sc.vesselId)
     }
-  }, [])
+  }
 
-  const handleSelectVessel = useCallback((vesselId) => {
+  const handleSelectVessel = (vesselId) => {
     setSelectedVesselId(vesselId)
     setActiveScenario(null)
     setRecommendation(buildRecommendation(vesselId))
-  }, [])
+  }
 
-  const runScenario = useCallback((scenarioId) => {
+  const runScenario = (scenarioId) => {
     const sc = SCENARIOS.find(s => s.id === scenarioId)
     if (!sc) return
     setActiveScenario(scenarioId)
     setSelectedVesselId(sc.vesselId)
     setRecommendation(buildScenarioRecommendation(scenarioId))
-  }, [])
+  }
 
-  const clearHistory = useCallback(() => {
+  const clearHistory = () => {
     if (confirm('Clear all logged decisions?')) persistHistory([])
-  }, [persistHistory])
-
-  // ─── Storm controls (called from WeatherCard) ─────────────────────────────
-  const handleForceStorm = useCallback(() => {
-    forceStorm()
-    setStormActive(true)
-    refreshSnapshot()
-    const alertText = 'Proactive alert: Malacca Strait storm probability has exceeded 85%. Assess exposed shipments and cold-chain risk.'
-    pushChatAlert(alertText)
-    setRecommendation(buildAlertDecision(
-      'Review exposed shipments and prioritise cold-chain cargo',
-      'Storm probability >85% on Malacca Strait. SHP-2041 (SL TRADER, 2-8°C) and SHP-2042 (AURORA PIONEER, 2-8°C) are critically exposed. Reefer monitoring required. Consider Sunda reroute.',
-      'Medium', false
-    ))
-    sendNotification('TMPRM Storm Alert', 'Malacca Strait storm probability >85%. Cold-chain cargo at risk.')
-  }, [refreshSnapshot, pushChatAlert])
-
-  const handleClearStorm = useCallback(() => {
-    clearStorm()
-    setStormActive(false)
-    refreshSnapshot()
-    pushChatAlert('Weather reset: Malacca Strait returned to normal simulated conditions.')
-  }, [refreshSnapshot, pushChatAlert])
-
-  // ─── Congestion controls (called from PortSummaryCard) ───────────────────
-  const handleForceCongestion = useCallback(() => {
-    forceCongestion()
-    setCongestionActive(true)
-    refreshSnapshot()
-    const alertText = 'Proactive alert: Tuas berth occupancy has reached 92%, indicating high congestion and likely queueing delay.'
-    pushChatAlert(alertText)
-    setRecommendation(buildAlertDecision(
-      'Review exposed shipments and prioritise cold-chain cargo',
-      'Berth occupancy at 92% — severe congestion. Priority berthing protocol required. Cold-chain pharma (SHP-2041, SHP-2042) must be unloaded first. Routine cargo (SHP-2044, SHP-2051) to be deferred 12-18h.',
-      'Medium', false
-    ))
-    sendNotification('TMPRM Congestion Alert', 'Tuas berth occupancy reached 92% — high congestion and queueing delay expected.')
-  }, [refreshSnapshot, pushChatAlert])
-
-  const handleClearCongestion = useCallback(() => {
-    clearCongestion()
-    setCongestionActive(false)
-    refreshSnapshot()
-    pushChatAlert('Congestion cleared: Tuas berth occupancy returned to normal simulated levels.')
-  }, [refreshSnapshot, pushChatAlert])
-
-  // ─── Shipment click → prefill chat ───────────────────────────────────────
-  const handleShipmentClick = useCallback((shipmentId) => {
-    prefillChat(`Assess risk for ${shipmentId}`)
-  }, [prefillChat])
-
-  // ─── Route selection → Decision Interface ────────────────────────────────
-  const handleRouteSelect = useCallback((routeDef, isStorm) => {
-    setActiveRouteId(routeDef.id)
-    const stormActive_ = isStorm || stormActive
-    const note = stormActive_ ? routeDef.stormNote : routeDef.note
-    const confidence = stormActive_ ? routeDef.stormConfidence : routeDef.confidence
-    const humanVal = routeDef.humanValidation || (stormActive_ && routeDef.id === 'R_MALACCA')
-
-    setRecommendation(buildAlertDecision(
-      `Select ${routeDef.label} for inbound vessels`,
-      `${routeDef.label}: Δ${routeDef.deltaDays > 0 ? '+' : ''}${routeDef.deltaDays} days, cost ×${(routeDef.costIndex/100).toFixed(2)}, CO2 ×${(routeDef.co2Index/100).toFixed(2)}. Risk: ${routeDef.riskLevel}. Cold-chain safe: ${routeDef.coldChainSafe ? 'Yes' : 'Conditional'}. ${note}`,
-      confidence,
-      humanVal
-    ))
-  }, [stormActive])
-
-  // ─── SL TRADER "View Full Details" ───────────────────────────────────────
-  const handleViewSlTrader = useCallback(() => {
-    prefillChat('Show me vessel SL TRADER')
-  }, [prefillChat])
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-navy-950">
-      <Header
-        decisionCount={history.length}
-        lastUpdated={snapshot.generatedAt}
-        mode={mode}
-      />
+      <Header decisionCount={history.length} />
 
-      {/* Toolbar bar */}
+      {/* Scenario bar */}
       <div className="bg-navy-800/60 border-b border-navy-600/40 px-4 py-2 flex items-center gap-2 overflow-x-auto">
-        {/* What-if toggle */}
-        <button
-          onClick={() => setShowSimulator(s => !s)}
-          className={`ml-auto shrink-0 text-[11px] px-2.5 py-1 rounded-md border transition font-medium flex items-center gap-1.5 ${
-            showSimulator
-              ? 'bg-accent-500/20 border-accent-500/50 text-accent-500'
-              : 'bg-navy-700/40 border-navy-600/40 text-navy-200 hover:bg-navy-600/50'
-          }`}
-        >
-          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-          </svg>
-          What-if Simulator
-        </button>
-
-        {/* Filters */}
-        <span className="shrink-0 text-[11px] text-navy-500 font-semibold tracking-wider">FILTER:</span>
-        <select
-          value={weatherFilter}
-          onChange={e => setWeatherFilter(e.target.value)}
-          className="text-[11px] px-2 py-1 rounded-md bg-navy-700/40 border border-navy-600/40 text-navy-200 focus:outline-none focus:ring-1 focus:ring-accent-500"
-          title="Weather Forecast filter"
-        >
-          <option value="all">Weather: All</option>
-          <option value="high-risk">Weather: High Risk Only</option>
-        </select>
-        <select
-          value={vesselFilter}
-          onChange={e => setVesselFilter(e.target.value)}
-          className="text-[11px] px-2 py-1 rounded-md bg-navy-700/40 border border-navy-600/40 text-navy-200 focus:outline-none focus:ring-1 focus:ring-accent-500"
-          title="Vessel type filter"
-        >
-          <option value="all">Vessels: All</option>
-          <option value="cold-chain">Cold-chain Pharma</option>
-          <option value="general">General Cargo</option>
-        </select>
+        <span className="text-[11px] text-navy-300 font-semibold tracking-wider shrink-0">TEST SCENARIOS:</span>
+        {SCENARIOS.map(s => (
+          <button
+            key={s.id}
+            onClick={() => runScenario(s.id)}
+            className={`text-[11px] px-2.5 py-1 rounded-md border transition shrink-0 ${
+              activeScenario === s.id
+                ? 'bg-accent-500/20 border-accent-500/50 text-accent-500'
+                : 'bg-navy-700/40 border-navy-600/40 text-navy-200 hover:bg-navy-600/50'
+            }`}
+            title={s.summary}
+          >
+            {s.id} · {s.title}
+          </button>
+        ))}
       </div>
 
       {/* Main grid */}
       <main className="flex-1 grid grid-cols-12 gap-3 p-3" style={{ minHeight: 0 }}>
         {/* Left: Chat advisor */}
         <div className="col-span-12 lg:col-span-3 flex flex-col" style={{ minHeight: 0 }}>
-          <ChatAdvisor
-            ref={chatRef}
-            onRecommendation={handleRecommendation}
-            onSelectVessel={handleSelectVessel}
-            mode={mode}
-            setMode={setMode}
-            apiKey={apiKey}
-            setApiKey={setApiKey}
-            llmModel={llmModel}
-            setLlmModel={setLlmModel}
-          />
+          <ChatAdvisor onRecommendation={handleRecommendation} onSelectVessel={handleSelectVessel} />
         </div>
 
-        {/* Center: Map + Decision Interface + widgets */}
+        {/* Center: Map + widgets */}
         <div className="col-span-12 lg:col-span-6 flex flex-col gap-3" style={{ minHeight: 0 }}>
-          <CommandMap
-            selectedId={selectedVesselId}
-            onSelect={handleSelectVessel}
-            snapshot={snapshot}
-            stormActive={stormActive}
-            congestionActive={congestionActive}
-            vesselFilter={vesselFilter}
-            onViewSlTrader={handleViewSlTrader}
-            onRouteSelect={handleRouteSelect}
-            activeRouteId={activeRouteId}
-          />
+          <CommandMap selectedId={selectedVesselId} onSelect={handleSelectVessel} />
+
+          {/* Decision interface — always visible, core differentiator */}
           <DecisionInterface recommendation={recommendation} onLog={handleLog} />
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <BerthOccupancyWidget snapshot={snapshot} />
-            <ShipmentRiskBoard
-              onSelectVessel={handleSelectVessel}
-              snapshot={snapshot}
-              vesselFilter={vesselFilter}
-              onShipmentClick={handleShipmentClick}
-            />
+            <BerthOccupancyWidget />
+            <ShipmentRiskBoard onSelectVessel={handleSelectVessel} />
           </div>
         </div>
 
-        {/* Right: Status cards + decision history */}
+        {/* Right: Cards */}
         <div className="col-span-12 lg:col-span-3 flex flex-col gap-3" style={{ minHeight: 0 }}>
-          <WeatherCard
-            snapshot={snapshot}
-            weatherFilter={weatherFilter}
-            stormActive={stormActive}
-            onForceStorm={handleForceStorm}
-            onClearStorm={handleClearStorm}
-          />
-          <PortSummaryCard
-            snapshot={snapshot}
-            congestionActive={congestionActive}
-            onForceCongestion={handleForceCongestion}
-            onClearCongestion={handleClearCongestion}
-          />
-          <RouteRiskSummary snapshot={snapshot} stormActive={stormActive} congestionActive={congestionActive} />
+          <WeatherCard />
+          <PortSummaryCard />
+          <RouteRiskSummary />
           <LegendCard />
-
-          {/* Assessment Test Prompts */}
-          <DemoTestPanel onSend={prefillChat} />
 
           {/* Decision history */}
           <div className="card">
             <div className="card-header">
               <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-accent-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <svg className="w-4 h-4 text-accent-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <h3 className="text-sm font-semibold tracking-wide text-navy-50">DECISION HISTORY</h3>
               </div>
               {history.length > 0 && (
-                <button onClick={clearHistory} className="text-[10px] text-navy-300 hover:text-red-400 transition">Clear</button>
+                <button onClick={clearHistory} className="text-[10px] text-navy-300 hover:text-red-400">Clear</button>
               )}
             </div>
             <div className="p-2 space-y-1.5 max-h-48 overflow-y-auto">
               {history.length === 0 ? (
-                <p className="text-[11px] text-navy-300 p-2 text-center">No decisions logged. Use the Decision Interface to log.</p>
+                <p className="text-[11px] text-navy-300 p-2 text-center">No decisions logged yet. Use the Decision Interface to log.</p>
               ) : history.map(d => (
                 <div key={d.id} className="bg-navy-900/40 border border-navy-600/30 rounded-lg px-2.5 py-1.5 slide-up">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono text-navy-300">{d.id}</span>
-                    <span className={`text-[9px] px-1.5 rounded ${
-                      d.confidence === 'High' ? 'bg-green-500/15 text-green-400'
-                      : d.confidence === 'Medium' ? 'bg-accent-500/15 text-accent-500'
-                      : 'bg-red-500/15 text-red-400'
-                    }`}>{d.confidence}</span>
+                    <span className={`text-[9px] px-1.5 rounded ${d.confidence === 'High' ? 'bg-green-500/15 text-green-400' : d.confidence === 'Medium' ? 'bg-accent-500/15 text-accent-500' : 'bg-red-500/15 text-red-400'}`}>{d.confidence}</span>
                   </div>
-                  <div className="text-[11px] text-navy-100 mt-0.5">{d.vessel || '—'}</div>
+                  <div className="text-[11px] text-navy-100 mt-0.5">{d.vessel}</div>
                   <div className="text-[10px] text-navy-300">{d.selectedAction}</div>
                   <div className="text-[9px] text-navy-400 mt-0.5">{new Date(d.timestamp).toLocaleTimeString()}</div>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
       </main>
 
-      {/* What-if Simulator — full width, collapsible */}
-      {showSimulator && (
-        <div className="px-3 pb-3">
-          <WhatIfSimulator onRecommendation={handleRecommendation} />
-        </div>
-      )}
-
+      {/* Bottom news ticker */}
       <div className="px-3 pb-3">
-        <NewsTicker snapshot={snapshot} />
+        <NewsTicker />
       </div>
 
       <footer className="px-4 py-2 text-center text-[10px] text-navy-400 border-t border-navy-600/40">
-        Tuas Mega Port Resilience Monitor · Digital Orchestrator Prototype · All data simulated · Supply Chain 4.0
+        Tuas Mega Port Resilience Monitor · Digital Orchestrator Prototype · MOCK MODE — all data simulated · Supply Chain 4.0
       </footer>
     </div>
   )
